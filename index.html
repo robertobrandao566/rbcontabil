@@ -2,219 +2,320 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#13242B">
-<title>RB Soluções Contábeis</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A1530">
+<title>RB Soluções Contábeis · Área do Cliente</title>
+<link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
 <style>
+/* Identidade RB: azul-marinho profundo, laranja de destaque, pêssego para chamadas, dourado da logo */
 :root{
-  --bg:#F2F5F4; --surface:#FFFFFF; --ink:#13242B; --muted:#5A6B70; --line:#D8E1DF;
-  --accent:#0E6A5B; --accent-soft:#DDEEE9; --brass:#B87618; --brass-soft:#F6E9D3;
-  --warn:#B4541A; --err:#B3261E; --err-soft:#FBE4E2;
-  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
-  --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --navy:#0A1530; --navy-deep:#050B1A; --panel:#101E3F; --panel-2:#14254B; --line:#22345E;
+  --white:#FFFFFF; --text:#E8ECF5; --muted:#8C99B8;
+  --orange:#E58A50; --peach:#F4B58C; --gold:#C9A24A;
+  --ok:#4CC38A; --run:#5AA7F2; --wait:#E58A50; --err:#FF8A80;
+  --f-head:"Montserrat","Segoe UI",system-ui,sans-serif;
+  --f-body:"Inter","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark){:root{
-  --bg:#0E1719; --surface:#162226; --ink:#E6EEEC; --muted:#93A5A8; --line:#26363A;
-  --accent:#4FBFA8; --accent-soft:#16342F; --brass:#E0A74C; --brass-soft:#3A2C16;
-  --warn:#E89660; --err:#F2948C; --err-soft:#3A1C1A; color-scheme:dark }}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
-.wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:22px}
-h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
-a{color:var(--accent)}
-:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+body{min-height:100vh;background:radial-gradient(120% 80% at 0% 100%, #24170F 0%, transparent 45%), linear-gradient(170deg, var(--navy) 0%, var(--navy-deep) 100%);
+  background-color:var(--navy-deep);color:var(--text);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+h1,h2,h3{font-family:var(--f-head);margin:0;text-wrap:balance;color:var(--white)}
+a{color:var(--peach)}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
 [hidden]{display:none!important}
 
-.brand{display:flex;align-items:center;gap:12px}
-.mark{width:46px;height:46px;border-radius:12px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:20px;flex:none}
-.brand h1{font-size:20px;line-height:1.15}
-.brand p{margin:0;color:var(--muted);font-size:13px}
-.brand .ig{margin-left:auto;font-size:13px;font-weight:600;text-decoration:none;border:1px solid var(--line);padding:6px 10px;border-radius:999px;white-space:nowrap}
+/* Faixa da marca (igual aos posts) */
+.brandbar{background:var(--white);border-bottom:5px solid var(--orange);padding:14px 16px calc(14px);padding-top:calc(14px + env(safe-area-inset-top,0px))}
+.brandbar .in{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brandbar img{height:38px;width:auto;max-width:72%}
+.brandbar .wa-mini{font:600 13px var(--f-body);color:#0A1530;text-decoration:none;border:1.5px solid #0A1530;border-radius:999px;padding:6px 12px;white-space:nowrap}
 
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
-.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:10px;padding:4px;gap:4px}
-.tabs button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:9px;background:transparent;color:var(--muted);cursor:pointer}
-.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
-form{display:flex;flex-direction:column;gap:12px}
-label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
-input,select{font:inherit;font-size:16px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.btn{font:inherit;font-weight:600;font-size:15px;padding:12px 16px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
-.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.wrap{max-width:640px;margin:0 auto;padding-inline:16px;padding-block:24px 110px;display:flex;flex-direction:column;gap:26px;position:relative}
+.deco{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.deco i{position:absolute;border:1.5px solid rgba(229,138,80,.28);border-radius:50%}
+.deco i:nth-child(1){width:520px;height:520px;right:-300px;top:80px}
+.deco i:nth-child(2){width:620px;height:620px;left:-420px;bottom:-260px}
+.wrap>*{position:relative;z-index:1}
+
+.eyebrow{font:700 12px var(--f-head);letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.lead{color:var(--muted);margin:0}
+.card{background:linear-gradient(180deg, rgba(20,37,75,.85), rgba(16,30,63,.85));border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(4px)}
+.sec{display:flex;flex-direction:column;gap:12px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sec-head h2{font-size:21px;font-weight:800}
+.quote{border-left:4px solid var(--orange);padding-left:14px;color:var(--peach);font-weight:600;font-size:16px;margin:0}
+
+/* Prazos */
+.next{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.bigdate{width:86px;text-align:center;border-radius:14px;background:var(--orange);color:#1A0E06;padding:10px 0;font-family:var(--f-head);line-height:1}
+.bigdate b{display:block;font-size:34px;font-weight:800}
+.bigdate span{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.next h3{font-size:19px}
+.next .faltam{font:700 13px var(--f-head);color:var(--peach);letter-spacing:.04em}
+.next p{margin:2px 0 0;color:var(--muted);font-size:13.5px}
+.duelist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.duelist li{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.duelist .d{font:700 14px var(--f-head);color:var(--white);text-align:center;line-height:1.1}
+.duelist .d small{display:block;font-size:10.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.duelist .w{min-width:0}
+.duelist .w strong{display:block;font-weight:600;font-size:14.5px;color:var(--white)}
+.duelist .w span{font-size:12.5px;color:var(--muted)}
+.chip{font:600 11.5px var(--f-body);padding:4px 10px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chip.hot{background:rgba(229,138,80,.18);color:var(--peach);border:1px solid rgba(229,138,80,.45)}
+.chip.cool{background:rgba(140,153,184,.12);color:var(--muted);border:1px solid var(--line)}
+.fine{font-size:12px;color:var(--muted);margin:0}
+
+/* Botões */
+.btn{font:600 15px var(--f-body);padding:13px 18px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--white);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.primary{background:var(--orange);border-color:var(--orange);color:#1A0E06}
+.btn.ghost{background:transparent}
 .btn:disabled{opacity:.6;cursor:wait}
-.msg{font-size:13.5px;padding:10px 12px;border-radius:10px;background:var(--err-soft);color:var(--err)}
-.hint{font-size:12.5px;color:var(--muted);margin:0}
-.link{background:none;border:0;padding:0;font:inherit;font-size:13px;color:var(--accent);cursor:pointer;text-decoration:underline;align-self:flex-start}
+.btn svg{width:18px;height:18px}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.action{display:flex;flex-direction:column;gap:8px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;text-decoration:none;color:var(--white);font:600 14px var(--f-body);cursor:pointer;min-width:0;text-align:left}
+.action:hover{border-color:var(--orange)}
+.action .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(229,138,80,.15);color:var(--orange)}
+.action.wa .ic{background:rgba(76,195,138,.15);color:var(--ok)}
+.action small{font:400 12px var(--f-body);color:var(--muted)}
+.ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-.client{background:var(--ink);color:var(--bg);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:8px}
-.client .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.12em;opacity:.7}
-.client h2{font-size:23px;line-height:1.15}
-.client .row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:13px}
-.client .cnpj{font-family:var(--f-mono);font-size:14px}
-.tag{font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;background:var(--brass);color:#1a1205}
-.client .out{margin-left:auto;background:none;border:1px solid rgba(255,255,255,.35);color:inherit;border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;cursor:pointer}
+/* Formulários */
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--navy-deep);border-radius:12px;padding:4px;gap:4px;border:1px solid var(--line)}
+.tabs button{font:600 14px var(--f-body);border:0;border-radius:9px;padding:10px;background:transparent;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--orange);color:#1A0E06}
+form{display:flex;flex-direction:column;gap:12px}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:600;color:var(--text)}
+input,select,textarea{font:400 16px var(--f-body);padding:12px 13px;border-radius:11px;border:1px solid var(--line);background:var(--navy-deep);color:var(--white);width:100%}
+textarea{min-height:96px;resize:vertical}
+input::placeholder,textarea::placeholder{color:#56638A}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.msg{font-size:13.5px;padding:10px 12px;border-radius:10px;background:rgba(255,138,128,.12);color:var(--err);border:1px solid rgba(255,138,128,.35)}
+.link{background:none;border:0;padding:0;font:500 13px var(--f-body);color:var(--peach);cursor:pointer;text-decoration:underline;align-self:flex-start}
 
-.sec-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
-.sec-title h3{font-size:17px}
-.sec-title span{font-size:12px;color:var(--muted)}
-.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px}
-.btnrow{display:flex;flex-wrap:wrap;gap:8px}
+/* Cliente */
+.hello{display:flex;flex-direction:column;gap:6px}
+.hello h1{font-size:28px;font-weight:800;line-height:1.15}
+.hello .row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;color:var(--muted);font-size:13.5px}
+.tag{font:700 11px var(--f-head);letter-spacing:.08em;padding:4px 9px;border-radius:999px;background:var(--gold);color:#1B1305}
+.out{margin-left:auto;background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:5px 12px;font:500 12.5px var(--f-body);cursor:pointer}
 
+/* Solicitações */
+.counts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.count{border-radius:12px;padding:10px 12px;border:1px solid var(--line);background:var(--panel);cursor:pointer;text-align:left;color:var(--text);font:inherit}
+.count b{display:block;font:800 22px var(--f-head);color:var(--white)}
+.count span{font-size:12px;color:var(--muted)}
+.count[aria-pressed="true"]{border-color:var(--orange);background:rgba(229,138,80,.1)}
+.count .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.reqs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.req{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--wait);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:6px}
+.req[data-s="andamento"]{border-left-color:var(--run)}
+.req[data-s="concluido"]{border-left-color:var(--ok)}
+.req .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.req strong{color:var(--white);font-size:14.5px}
+.req .meta{font-size:12px;color:var(--muted)}
+.req p{margin:0;font-size:13.5px;color:var(--text);overflow-wrap:anywhere}
+.req .resp{border-top:1px dashed var(--line);padding-top:8px;color:var(--peach);font-size:13.5px}
+.status{font:700 11px var(--f-head);letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.status.pendente{background:rgba(229,138,80,.16);color:var(--peach)}
+.status.andamento{background:rgba(90,167,242,.16);color:#A9D0F8}
+.status.concluido{background:rgba(76,195,138,.16);color:#9BE3BF}
+.empty{color:var(--muted);font-size:13.5px;margin:0}
+
+/* Documentos */
 .files{list-style:none;margin:0;padding:0}
-.files li{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.files li{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
 .files li:first-child{border-top:0;padding-top:0}
-.files .nm{min-width:0;overflow-wrap:anywhere;font-size:14px;font-weight:500}
-.files small{display:block;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
-.files .dl{font:inherit;font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-soft);border:0;border-radius:8px;padding:7px 10px;cursor:pointer}
-.empty{font-size:13.5px;color:var(--muted);margin:0}
-.drop{border:1.5px dashed var(--line);border-radius:12px;padding:16px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center}
-.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.files .nm{min-width:0;overflow-wrap:anywhere;font-size:14px;font-weight:500;color:var(--white)}
+.files small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.files .dl{font:600 13px var(--f-body);color:var(--peach);background:rgba(229,138,80,.12);border:1px solid rgba(229,138,80,.35);border-radius:9px;padding:7px 11px;cursor:pointer}
+.drop{border:1.5px dashed var(--line);border-radius:12px;padding:18px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;color:var(--muted);font-size:13.5px}
+.drop.over{border-color:var(--orange);background:rgba(229,138,80,.08)}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px}
 
-.due ul{margin:0;padding:0}
-.due li{list-style:none;display:grid;grid-template-columns:58px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
-.due li:first-child{border-top:0;padding-top:0}
-.date{font-family:var(--f-mono);text-align:center;border-radius:10px;background:var(--brass-soft);color:var(--brass);padding:6px 0;line-height:1.1}
-.date b{display:block;font-size:20px}
-.date i{font-style:normal;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
-.due .what{min-width:0}
-.due .what strong{display:block;font-size:14.5px}
-.due .what small{color:var(--muted);font-size:12.5px}
-.pill{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
-.pill.soon{background:var(--warn);color:#fff}
-.pill.ok{background:var(--accent-soft);color:var(--accent)}
+/* WhatsApp flutuante */
+.fab{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:10;display:flex;align-items:center;gap:8px;background:#25D366;color:#06210F;
+  font:700 14px var(--f-body);text-decoration:none;padding:12px 16px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.fab svg{width:20px;height:20px}
 
-footer{font-size:12px;color:var(--muted);text-align:center}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;max-width:90vw;text-align:center}
-@media (max-width:380px){.two{grid-template-columns:1fr}}
+.foot{background:var(--white);border-top:5px solid var(--orange);padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));text-align:center}
+.foot img{height:44px;width:auto;max-width:90%}
+.foot p{margin:6px 0 0;font-size:12px;color:#55607A}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--white);color:var(--navy);padding:10px 16px;border-radius:999px;font:600 13px var(--f-body);max-width:90vw;text-align:center;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+@media (max-width:480px){.actions{grid-template-columns:1fr 1fr}.action.wa{grid-column:1/-1;flex-direction:row;align-items:center;flex-wrap:wrap}.actions:has(#btnDas[hidden]) .action.wa{grid-column:auto;flex-direction:column;align-items:flex-start}.two{grid-template-columns:1fr}.hello h1{font-size:24px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="brand">
-    <div class="mark" aria-hidden="true">RB</div>
-    <div>
-      <h1>RB Soluções Contábeis</h1>
-      <p>Roberto Brandão · CRC/CE 30161/O-7</p>
+<header class="brandbar">
+  <div class="in">
+    <img src="logo.png" alt="RB Soluções Contábeis — Contabilidade Digital e Consultiva">
+    <a class="wa-mini" id="waTop" href="#" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+</header>
+
+<div class="deco" aria-hidden="true"><i></i><i></i></div>
+
+<main class="wrap">
+
+  <!-- Painel de prazos (sempre visível) -->
+  <section class="sec" aria-labelledby="tPrazos">
+    <span class="eyebrow">Próximos vencimentos</span>
+    <div class="card">
+      <div class="next" id="proximo"></div>
+      <ul class="duelist" id="listaVenc"></ul>
+      <p class="fine">Datas ajustadas para fins de semana. Feriados não considerados.</p>
     </div>
-    <a class="ig" href="https://www.instagram.com/robertocontador_/" target="_blank" rel="noopener">@robertocontador_</a>
-  </header>
-
-  <!-- ===== Acesso ===== -->
-  <section class="card" id="telaAcesso">
-    <div class="tabs" role="tablist">
-      <button role="tab" id="tabEntrar" aria-selected="true">Entrar</button>
-      <button role="tab" id="tabCadastrar" aria-selected="false">Criar cadastro</button>
-    </div>
-
-    <form id="formEntrar">
-      <label class="f" for="lCnpj">CNPJ
-        <input id="lCnpj" inputmode="numeric" autocomplete="username" placeholder="00.000.000/0000-00" required>
-      </label>
-      <label class="f" for="lSenha">Senha
-        <input id="lSenha" type="password" autocomplete="current-password" required>
-      </label>
-      <div class="msg" id="erroEntrar" hidden></div>
-      <button class="btn solid" type="submit">Entrar</button>
-      <button class="link" type="button" id="btnEsqueci">Esqueci minha senha</button>
-      <p class="hint" id="txtEsqueci" hidden>Fale com o escritório pelo Instagram. Vamos liberar a troca, e no próximo acesso a senha que você digitar passa a ser a nova.</p>
-    </form>
-
-    <form id="formCadastrar" hidden>
-      <label class="f" for="cNome">Nome ou razão social
-        <input id="cNome" autocomplete="organization" required>
-      </label>
-      <div class="two">
-        <label class="f" for="cCnpj">CNPJ
-          <input id="cCnpj" inputmode="numeric" placeholder="00.000.000/0000-00" required>
-        </label>
-        <label class="f" for="cTipo">Tipo de empresa
-          <select id="cTipo"><option value="MEI">MEI</option><option value="ME">ME (Simples)</option><option value="EPP">EPP (Simples)</option></select>
-        </label>
-      </div>
-      <label class="f" for="cEmail">E-mail
-        <input id="cEmail" type="email" autocomplete="email" required>
-      </label>
-      <label class="f" for="cTel">WhatsApp
-        <input id="cTel" inputmode="tel" autocomplete="tel" placeholder="(85) 90000-0000">
-      </label>
-      <div class="two">
-        <label class="f" for="cSenha">Crie uma senha
-          <input id="cSenha" type="password" autocomplete="new-password" minlength="6" required>
-        </label>
-        <label class="f" for="cSenha2">Repita a senha
-          <input id="cSenha2" type="password" autocomplete="new-password" minlength="6" required>
-        </label>
-      </div>
-      <div class="msg" id="erroCadastrar" hidden></div>
-      <button class="btn solid" type="submit">Criar meu acesso</button>
-      <p class="hint">Seus dados ficam guardados pela RB Soluções Contábeis e são usados só para prestar o serviço contábil.</p>
-    </form>
   </section>
 
-  <!-- ===== Painel do cliente ===== -->
-  <div id="telaPainel" hidden style="display:flex;flex-direction:column;gap:22px">
-    <section class="client">
-      <span class="eyebrow">Área do cliente</span>
-      <h2 id="pNome"></h2>
-      <div class="row">
-        <span class="cnpj" id="pCnpj"></span>
-        <span class="tag" id="pTipo"></span>
-        <button class="out" id="btnSair">Sair</button>
+  <!-- Acesso -->
+  <section class="sec" id="telaAcesso">
+    <div class="sec-head"><div><span class="eyebrow">Área do cliente</span><h2 id="tPrazos">Seus documentos, guias e pedidos num só lugar</h2></div></div>
+    <div class="card">
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tabEntrar" aria-selected="true">Entrar</button>
+        <button role="tab" id="tabCadastrar" aria-selected="false">Criar cadastro</button>
       </div>
+      <form id="formEntrar">
+        <label class="f" for="lCnpj">CNPJ<input id="lCnpj" inputmode="numeric" autocomplete="username" placeholder="00.000.000/0000-00" required></label>
+        <label class="f" for="lSenha">Senha<input id="lSenha" type="password" autocomplete="current-password" required></label>
+        <div class="msg" id="erroEntrar" hidden></div>
+        <button class="btn primary" type="submit">Entrar</button>
+        <button class="link" type="button" id="btnEsqueci">Esqueci minha senha</button>
+        <p class="fine" id="txtEsqueci" hidden>Fale com o escritório pelo WhatsApp. Liberamos a troca e, no próximo acesso, a senha que você digitar passa a ser a nova.</p>
+      </form>
+      <form id="formCadastrar" hidden>
+        <label class="f" for="cNome">Nome ou razão social<input id="cNome" autocomplete="organization" required></label>
+        <div class="two">
+          <label class="f" for="cCnpj">CNPJ<input id="cCnpj" inputmode="numeric" placeholder="00.000.000/0000-00" required></label>
+          <label class="f" for="cTipo">Tipo de empresa
+            <select id="cTipo"><option value="MEI">MEI</option><option value="ME">ME (Simples Nacional)</option><option value="EPP">EPP (Simples Nacional)</option></select>
+          </label>
+        </div>
+        <label class="f" for="cEmail">E-mail<input id="cEmail" type="email" autocomplete="email" required></label>
+        <label class="f" for="cTel">WhatsApp<input id="cTel" inputmode="tel" autocomplete="tel" placeholder="(85) 90000-0000"></label>
+        <div class="two">
+          <label class="f" for="cSenha">Crie uma senha<input id="cSenha" type="password" autocomplete="new-password" minlength="6" required></label>
+          <label class="f" for="cSenha2">Repita a senha<input id="cSenha2" type="password" autocomplete="new-password" minlength="6" required></label>
+        </div>
+        <div class="msg" id="erroCadastrar" hidden></div>
+        <button class="btn primary" type="submit">Criar meu acesso</button>
+        <p class="fine">Seus dados ficam com a RB Soluções Contábeis e são usados só para a prestação do serviço contábil.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Painel do cliente -->
+  <div id="telaPainel" hidden style="display:flex;flex-direction:column;gap:26px">
+    <section class="hello">
+      <span class="eyebrow">Área do cliente</span>
+      <h1 id="pNome"></h1>
+      <div class="row"><span id="pCnpj"></span><span class="tag" id="pTipo"></span><button class="out" id="btnSair">Sair</button></div>
     </section>
 
-    <section class="card" id="secDas">
-      <div class="sec-title"><h3>Emitir o DAS do MEI</h3></div>
+    <section class="actions" aria-label="Ações rápidas">
+      <button class="action" id="btnDas" type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span>
+        Emitir DAS<small>Guia do MEI no PGMEI</small>
+      </button>
+      <button class="action" id="btnIrEnviar" type="button">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg></span>
+        Enviar documento<small>Notas, extratos, comprovantes</small>
+      </button>
+      <a class="action wa" id="waAction" href="#" target="_blank" rel="noopener">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-5A8 8 0 1 1 21 12z"/></svg></span>
+        Fale com o contador<small>Atendimento no WhatsApp</small>
+      </a>
+    </section>
+
+    <section class="card" id="secDas" hidden>
+      <span class="eyebrow">Guia do MEI</span>
       <ol class="steps">
         <li>Toque em <b>Copiar CNPJ</b>.</li>
         <li>Toque em <b>Abrir PGMEI</b> e cole o CNPJ na tela da Receita.</li>
         <li>Escolha <b>Emitir Guia de Pagamento (DAS)</b>, marque o mês e gere a guia.</li>
       </ol>
-      <div class="btnrow">
-        <button class="btn" id="btnCopiar">Copiar CNPJ</button>
-        <a class="btn solid" href="https://www8.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgmei.app/Identificacao" target="_blank" rel="noopener">Abrir PGMEI</a>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <button class="btn" id="btnCopiar" type="button">Copiar CNPJ</button>
+        <a class="btn primary" href="https://www8.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgmei.app/Identificacao" target="_blank" rel="noopener">Abrir PGMEI</a>
       </div>
-      <p class="hint">Meses atrasados podem sair numa guia só. Na dúvida, fale com a gente antes de pagar.</p>
+      <p class="quote">Meses atrasados podem sair numa guia só. Na dúvida, fale com a gente antes de pagar.</p>
     </section>
 
-    <section class="card">
-      <div class="sec-title"><h3>Do escritório para você</h3><span>guias, holerites, declarações</span></div>
-      <ul class="files" id="listaEscritorio"><li><span class="nm">Carregando…</span></li></ul>
-    </section>
-
-    <section class="card">
-      <div class="sec-title"><h3>Enviar documentos</h3><span>até 10 MB por arquivo</span></div>
-      <div class="drop" id="drop">
-        <span>Notas, extratos, comprovantes, relatórios de venda</span>
-        <label class="btn solid" for="arquivos">Escolher arquivos</label>
-        <input type="file" id="arquivos" multiple hidden>
+    <!-- Solicitações -->
+    <section class="sec" aria-labelledby="tSol">
+      <div class="sec-head"><div><span class="eyebrow">Solicitações</span><h2 id="tSol">Seus pedidos ao escritório</h2></div>
+        <button class="btn ghost" id="btnNova" type="button">+ Nova solicitação</button></div>
+      <div class="counts" role="group" aria-label="Filtrar por status">
+        <button class="count" data-f="pendente" aria-pressed="false"><b id="nPend">0</b><span><i class="dot" style="background:var(--wait)"></i>Pendente</span></button>
+        <button class="count" data-f="andamento" aria-pressed="false"><b id="nAnd">0</b><span><i class="dot" style="background:var(--run)"></i>Em andamento</span></button>
+        <button class="count" data-f="concluido" aria-pressed="false"><b id="nConc">0</b><span><i class="dot" style="background:var(--ok)"></i>Concluído</span></button>
       </div>
-      <div class="sec-title"><h3 style="font-size:15px">Já enviados</h3></div>
-      <ul class="files" id="listaEnviados"></ul>
+      <form class="card" id="formSol" hidden>
+        <label class="f" for="sAssunto">Assunto
+          <select id="sAssunto" required>
+            <option value="">Escolha…</option>
+            <option>Emissão de guia (DAS, FGTS, DARF)</option>
+            <option>Nota fiscal</option>
+            <option>Folha de pagamento / funcionários</option>
+            <option>Declaração (DASN, DEFIS, IR)</option>
+            <option>Abertura, alteração ou baixa de empresa</option>
+            <option>Certidão negativa</option>
+            <option>Outro assunto</option>
+          </select>
+        </label>
+        <label class="f" for="sDesc">O que você precisa?<textarea id="sDesc" placeholder="Ex.: preciso da guia do DAS de setembro e da certidão negativa para uma licitação." required></textarea></label>
+        <div class="msg" id="erroSol" hidden></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" type="submit">Enviar solicitação</button><button class="btn ghost" type="button" id="btnCancelSol">Cancelar</button></div>
+      </form>
+      <ul class="reqs" id="listaSol"><li><p class="empty">Carregando…</p></li></ul>
     </section>
 
-    <section class="card due">
-      <div class="sec-title"><h3>Próximos vencimentos</h3><span>feriados não considerados</span></div>
-      <ul id="listaVenc"></ul>
+    <!-- Documentos -->
+    <section class="sec" aria-labelledby="tDocs">
+      <div><span class="eyebrow">Documentos</span><h2 id="tDocs">Do escritório para você</h2></div>
+      <div class="card"><ul class="files" id="listaEscritorio"><li><span class="nm">Carregando…</span></li></ul></div>
+    </section>
+
+    <section class="sec" id="secEnviar" aria-labelledby="tEnv">
+      <div><span class="eyebrow">Envio</span><h2 id="tEnv">Enviar documentos</h2></div>
+      <div class="card">
+        <div class="drop" id="drop">
+          <span>Arraste aqui ou escolha os arquivos (até 10 MB cada)</span>
+          <label class="btn primary" for="arquivos">Escolher arquivos</label>
+          <input type="file" id="arquivos" multiple hidden>
+        </div>
+        <span class="eyebrow" style="font-size:11px">Já enviados</span>
+        <ul class="files" id="listaEnviados"></ul>
+      </div>
     </section>
   </div>
+</main>
 
-  <footer>RB Soluções Contábeis · Fortaleza/CE</footer>
-</div>
+<footer class="foot">
+  <img src="logo.png" alt="RB Soluções Contábeis">
+  <p>Roberto Brandão · CRC/CE 30161/O-7 · Fortaleza/CE · <a href="https://www.instagram.com/robertocontador_/" target="_blank" rel="noopener" style="color:#0A1530">@robertocontador_</a></p>
+</footer>
+
+<a class="fab" id="waFab" href="#" target="_blank" rel="noopener" aria-label="Fale com o contador no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>
+  Fale com o contador
+</a>
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script>
-const $ = id => document.getElementById(id);
-let sessao = null;
-
-function toast(m){ const t=$('toast'); t.textContent=m; t.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>t.hidden=true,2600); }
-function erro(id,m){ $(id).textContent=m; $(id).hidden=!m; }
 const API = 'https://script.google.com/macros/s/AKfycbwl_DbKYgCw8atep7-X-LMIe4qe6t5TgzhsVusMZkmU-olWhtLuXst9HWcVM8nOHMRg/exec';
+const WHATSAPP = '5585988716021';
+const $ = id => document.getElementById(id);
+let sessao = null, solicitacoes = [], filtro = null;
+
+function toast(m){ const t=$('toast'); t.textContent=m; t.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>t.hidden=true,2800); }
+function erro(id,m){ $(id).textContent=m; $(id).hidden=!m; }
 async function chamar(acao, ...args){
   let r;
   try { r = await fetch(API, { method:'POST', body: JSON.stringify({ acao, args }) }); }
@@ -223,19 +324,60 @@ async function chamar(acao, ...args){
   if(!j.ok) throw new Error(j.erro);
   return j.dados;
 }
+
+/* WhatsApp */
+function linkWhats(){
+  const quem = sessao ? ('Sou ' + sessao.nome + ' (CNPJ ' + sessao.cnpj + '). ') : '';
+  return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent('Olá, Roberto! ' + quem + 'Vim pelo app da RB Soluções Contábeis.');
+}
+function atualizaWhats(){ ['waTop','waAction','waFab'].forEach(id => $(id).href = linkWhats()); }
+atualizaWhats();
+
+/* Máscara de CNPJ */
 function mascaraCnpj(el){
   el.addEventListener('input',()=>{
     let v=el.value.replace(/\D/g,'').slice(0,14);
-    v=v.replace(/^(\d{2})(\d)/,'$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3')
-       .replace(/\.(\d{3})(\d)/,'.$1/$2').replace(/(\d{4})(\d)/,'$1-$2');
+    v=v.replace(/^(\d{2})(\d)/,'$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3').replace(/\.(\d{3})(\d)/,'.$1/$2').replace(/(\d{4})(\d)/,'$1-$2');
     el.value=v;
   });
 }
 mascaraCnpj($('lCnpj')); mascaraCnpj($('cCnpj'));
 
-/* Abas */
+/* Prazos */
+const MESES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function montarVencimentos(tipo){
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  const ajusta=(d,modo)=>{ const x=new Date(d); while(x.getDay()===0||x.getDay()===6) x.setDate(x.getDate()+(modo==='posterga'?1:-1)); return x; };
+  const proximo=(dia,modo)=>{ for(let m=0;m<3;m++){ const d=ajusta(new Date(hoje.getFullYear(),hoje.getMonth()+m,dia),modo); if(d>=hoje) return d; } };
+  const anual=(mes,dia,modo)=>{ let d=ajusta(new Date(hoje.getFullYear(),mes,dia),modo); if(d<hoje) d=ajusta(new Date(hoje.getFullYear()+1,mes,dia),modo); return d; };
+  let v=[
+    {nome:'DAS do MEI',obs:'Imposto mensal do MEI',data:proximo(20,'posterga'),t:['MEI']},
+    {nome:'DAS do Simples Nacional',obs:'Apuração no PGDAS-D',data:proximo(20,'posterga'),t:['ME','EPP']},
+    {nome:'FGTS Digital',obs:'Para quem tem funcionário registrado',data:proximo(20,'antecipa'),t:['MEI','ME','EPP']},
+    {nome:'DCTFWeb (INSS da folha)',obs:'Empresas com folha de pagamento',data:proximo(20,'antecipa'),t:['ME','EPP']},
+    {nome:'DEFIS',obs:'Declaração anual do Simples Nacional',data:anual(2,31,'antecipa'),t:['ME','EPP']},
+    {nome:'DASN-SIMEI',obs:'Declaração anual do MEI',data:anual(4,31,'antecipa'),t:['MEI']}
+  ];
+  if(tipo) v=v.filter(x=>x.t.includes(tipo));
+  else v=v.map(x=>({...x, obs:x.obs+' · '+(x.t.length===3?'todos':x.t.join('/'))}));
+  v.sort((a,b)=>a.data-b.data);
+  const dias=d=>Math.round((d-hoje)/864e5);
+  const falta=n=>n===0?'Vence hoje':n===1?'Vence amanhã':'Faltam '+n+' dias';
+  const p=v[0];
+  $('proximo').innerHTML='<div class="bigdate"><b>'+String(p.data.getDate()).padStart(2,'0')+'</b><span>'+MESES[p.data.getMonth()]+'</span></div>'+
+    '<div><span class="faltam">'+falta(dias(p.data)).toUpperCase()+'</span><h3>'+p.nome+'</h3><p>'+p.obs+'</p></div>';
+  $('listaVenc').innerHTML=v.slice(1).map(x=>{
+    const n=dias(x.data);
+    return '<li><div class="d">'+String(x.data.getDate()).padStart(2,'0')+'<small>'+MESES[x.data.getMonth()]+'</small></div>'+
+      '<div class="w"><strong>'+x.nome+'</strong><span>'+x.obs+'</span></div>'+
+      '<span class="chip '+(n<=7?'hot':'cool')+'">'+(n===0?'hoje':n===1?'amanhã':'em '+n+' dias')+'</span></li>';
+  }).join('');
+}
+montarVencimentos(null);
+
+/* Acesso */
 function aba(qual){
-  const ent = qual==='entrar';
+  const ent=qual==='entrar';
   $('tabEntrar').setAttribute('aria-selected',ent); $('tabCadastrar').setAttribute('aria-selected',!ent);
   $('formEntrar').hidden=!ent; $('formCadastrar').hidden=ent;
 }
@@ -243,7 +385,6 @@ $('tabEntrar').onclick=()=>aba('entrar');
 $('tabCadastrar').onclick=()=>aba('cadastrar');
 $('btnEsqueci').onclick=()=>$('txtEsqueci').hidden=false;
 
-/* Entrar */
 $('formEntrar').addEventListener('submit', async e=>{
   e.preventDefault(); erro('erroEntrar','');
   const b=e.submitter; b.disabled=true; b.textContent='Entrando…';
@@ -251,15 +392,12 @@ $('formEntrar').addEventListener('submit', async e=>{
   catch(x){ erro('erroEntrar',x.message); }
   finally{ b.disabled=false; b.textContent='Entrar'; }
 });
-
-/* Cadastrar */
 $('formCadastrar').addEventListener('submit', async e=>{
   e.preventDefault(); erro('erroCadastrar','');
   if($('cSenha').value!==$('cSenha2').value){ erro('erroCadastrar','As senhas não são iguais.'); return; }
   const b=e.submitter; b.disabled=true; b.textContent='Criando seu acesso…';
   try{
-    const s=await chamar('cadastrar',{nome:$('cNome').value,cnpj:$('cCnpj').value,tipo:$('cTipo').value,
-      email:$('cEmail').value,telefone:$('cTel').value,senha:$('cSenha').value});
+    const s=await chamar('cadastrar',{nome:$('cNome').value,cnpj:$('cCnpj').value,tipo:$('cTipo').value,email:$('cEmail').value,telefone:$('cTel').value,senha:$('cSenha').value});
     abrirPainel(s); toast('Cadastro criado. Bem-vindo!');
   }catch(x){ erro('erroCadastrar',x.message); }
   finally{ b.disabled=false; b.textContent='Criar meu acesso'; }
@@ -271,44 +409,87 @@ function abrirPainel(s){
   try{ sessionStorage.setItem('rb_sessao', JSON.stringify(s)); }catch(e){}
   $('telaAcesso').hidden=true; $('telaPainel').hidden=false;
   $('pNome').textContent='Olá, '+s.nome; $('pCnpj').textContent='CNPJ '+s.cnpj; $('pTipo').textContent=s.tipo;
-  $('secDas').hidden = s.tipo!=='MEI';
-  montarVencimentos(s.tipo);
-  carregarDocs();
+  $('btnDas').hidden = s.tipo!=='MEI';
+  montarVencimentos(s.tipo); atualizaWhats();
+  carregarDocs(); carregarSolicitacoes();
 }
 $('btnSair').onclick=async()=>{ try{ await chamar('sair',sessao.token);}catch(e){} try{ sessionStorage.removeItem('rb_sessao'); }catch(e){} location.reload(); };
+$('btnDas').onclick=()=>{ const s=$('secDas'); s.hidden=!s.hidden; if(!s.hidden) s.scrollIntoView({block:'nearest'}); };
+$('btnIrEnviar').onclick=()=>$('secEnviar').scrollIntoView({block:'start'});
 $('btnCopiar').onclick=()=>{
   const num=sessao.cnpj.replace(/\D/g,'');
   navigator.clipboard.writeText(num).then(()=>toast('CNPJ copiado')).catch(()=>toast('CNPJ: '+num));
 };
-
 function tratarSessao(x){
   if(/sessão expirou/i.test(x.message)){ try{ sessionStorage.removeItem('rb_sessao'); }catch(e){} toast(x.message); setTimeout(()=>location.reload(),1500); }
   else toast(x.message);
 }
-function fmtData(iso){ const d=new Date(iso); return d.toLocaleDateString('pt-BR'); }
-function fmtTam(b){ return b>1048576 ? (b/1048576).toFixed(1).replace('.',',')+' MB' : Math.max(1,Math.round(b/1024))+' KB'; }
+const fmtData=iso=>new Date(iso).toLocaleDateString('pt-BR');
+const fmtTam=b=>b>1048576?(b/1048576).toFixed(1).replace('.',',')+' MB':Math.max(1,Math.round(b/1024))+' KB';
 
-function renderLista(el, arquivos, comBaixar, vazio){
+/* Solicitações */
+const chaveStatus=s=>s==='Concluído'?'concluido':s==='Em andamento'?'andamento':'pendente';
+async function carregarSolicitacoes(){
+  try{ solicitacoes=await chamar('listarSolicitacoes',sessao.token); renderSol(); }
+  catch(x){ tratarSessao(x); }
+}
+function renderSol(){
+  const c={pendente:0,andamento:0,concluido:0};
+  solicitacoes.forEach(s=>c[chaveStatus(s.status)]++);
+  $('nPend').textContent=c.pendente; $('nAnd').textContent=c.andamento; $('nConc').textContent=c.concluido;
+  document.querySelectorAll('.count').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.f===filtro)));
+  const lista=solicitacoes.filter(s=>!filtro||chaveStatus(s.status)===filtro);
+  const ul=$('listaSol'); ul.innerHTML='';
+  if(!lista.length){
+    ul.innerHTML='<li><p class="empty">'+(solicitacoes.length?'Nenhuma solicitação com esse status.':'Você ainda não fez solicitações. Toque em "+ Nova solicitação" para pedir guias, certidões, notas ou o que precisar.')+'</p></li>';
+    return;
+  }
+  lista.forEach(s=>{
+    const k=chaveStatus(s.status);
+    const li=document.createElement('li'); li.className='req'; li.dataset.s=k;
+    const top=document.createElement('div'); top.className='top';
+    const t=document.createElement('div');
+    const st=document.createElement('strong'); st.textContent=s.assunto;
+    const meta=document.createElement('div'); meta.className='meta'; meta.textContent=s.id+' · '+fmtData(s.data);
+    t.append(st,meta);
+    const badge=document.createElement('span'); badge.className='status '+k; badge.textContent=s.status;
+    top.append(t,badge);
+    const p=document.createElement('p'); p.textContent=s.descricao;
+    li.append(top,p);
+    if(s.resposta){ const r=document.createElement('div'); r.className='resp'; r.textContent='Escritório: '+s.resposta; li.append(r); }
+    ul.append(li);
+  });
+}
+document.querySelectorAll('.count').forEach(b=>b.onclick=()=>{ filtro = filtro===b.dataset.f ? null : b.dataset.f; renderSol(); });
+$('btnNova').onclick=()=>{ $('formSol').hidden=false; $('sAssunto').focus(); };
+$('btnCancelSol').onclick=()=>{ $('formSol').hidden=true; erro('erroSol',''); };
+$('formSol').addEventListener('submit', async e=>{
+  e.preventDefault(); erro('erroSol','');
+  const b=e.submitter; b.disabled=true; b.textContent='Enviando…';
+  try{
+    solicitacoes=await chamar('criarSolicitacao',sessao.token,{assunto:$('sAssunto').value,descricao:$('sDesc').value});
+    $('formSol').reset(); $('formSol').hidden=true; filtro=null; renderSol(); toast('Solicitação enviada ao escritório');
+  }catch(x){ if(/sessão expirou/i.test(x.message)) tratarSessao(x); else erro('erroSol',x.message); }
+  finally{ b.disabled=false; b.textContent='Enviar solicitação'; }
+});
+
+/* Documentos */
+function renderLista(el, arquivos, vazio){
   el.innerHTML='';
   if(!arquivos.length){ el.innerHTML='<li><p class="empty">'+vazio+'</p></li>'; return; }
   arquivos.forEach(a=>{
     const li=document.createElement('li');
-    const info=document.createElement('div'); info.className='nm';
-    info.textContent=a.nome;
+    const info=document.createElement('div'); info.className='nm'; info.textContent=a.nome;
     const sm=document.createElement('small'); sm.textContent=fmtData(a.data)+' · '+fmtTam(a.tamanho); info.appendChild(sm);
-    li.appendChild(info);
-    if(comBaixar){
-      const b=document.createElement('button'); b.className='dl'; b.textContent='Baixar';
-      b.onclick=()=>baixar(a.id,b); li.appendChild(b);
-    }
-    el.appendChild(li);
+    const b=document.createElement('button'); b.className='dl'; b.textContent='Baixar'; b.onclick=()=>baixar(a.id,b);
+    li.append(info,b); el.appendChild(li);
   });
 }
 async function carregarDocs(){
   try{
     const r=await chamar('listarDocumentos',sessao.token);
-    renderLista($('listaEscritorio'),r.doEscritorio,true,'Nenhum documento ainda. Quando o escritório enviar guias ou declarações, eles aparecem aqui.');
-    renderLista($('listaEnviados'),r.enviados,true,'Você ainda não enviou documentos.');
+    renderLista($('listaEscritorio'),r.doEscritorio,'Nenhum documento ainda. Guias, holerites e declarações enviados pelo escritório aparecem aqui.');
+    renderLista($('listaEnviados'),r.enviados,'Você ainda não enviou documentos.');
   }catch(x){ tratarSessao(x); }
 }
 async function baixar(id,btn){
@@ -323,11 +504,7 @@ async function baixar(id,btn){
   }catch(x){ tratarSessao(x); }
   finally{ btn.disabled=false; btn.textContent='Baixar'; }
 }
-
-/* Envio */
-function lerBase64(file){
-  return new Promise((ok,falha)=>{ const r=new FileReader(); r.onload=()=>ok(String(r.result).split(',')[1]); r.onerror=falha; r.readAsDataURL(file); });
-}
+function lerBase64(file){ return new Promise((ok,falha)=>{ const r=new FileReader(); r.onload=()=>ok(String(r.result).split(',')[1]); r.onerror=falha; r.readAsDataURL(file); }); }
 async function enviar(files){
   for(const f of files){
     if(f.size>10*1024*1024){ toast(f.name+' passa de 10 MB'); continue; }
@@ -342,30 +519,6 @@ const drop=$('drop');
 ['dragenter','dragover'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.add('over');}));
 ['dragleave','drop'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.remove('over');}));
 drop.addEventListener('drop',e=>enviar([...e.dataTransfer.files]));
-
-/* Vencimentos */
-function montarVencimentos(tipo){
-  const MESES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-  const hoje=new Date(); hoje.setHours(0,0,0,0);
-  const ajusta=(d,modo)=>{ const x=new Date(d); while(x.getDay()===0||x.getDay()===6) x.setDate(x.getDate()+(modo==='posterga'?1:-1)); return x; };
-  const proximo=(dia,modo)=>{ for(let m=0;m<3;m++){ const d=ajusta(new Date(hoje.getFullYear(),hoje.getMonth()+m,dia),modo); if(d>=hoje) return d; } };
-  const anual=(mes,dia,modo)=>{ let d=ajusta(new Date(hoje.getFullYear(),mes,dia),modo); if(d<hoje) d=ajusta(new Date(hoje.getFullYear()+1,mes,dia),modo); return d; };
-  const v=[
-    {nome:'DAS do MEI',obs:'Competência do mês anterior',data:proximo(20,'posterga'),t:['MEI']},
-    {nome:'DAS do Simples Nacional',obs:'Apuração no PGDAS-D',data:proximo(20,'posterga'),t:['ME','EPP']},
-    {nome:'FGTS Digital',obs:'Se você tem funcionário registrado',data:proximo(20,'antecipa'),t:['MEI','ME','EPP']},
-    {nome:'DCTFWeb (INSS da folha)',obs:'Empresas com folha de pagamento',data:proximo(20,'antecipa'),t:['ME','EPP']},
-    {nome:'DEFIS',obs:'Declaração anual do Simples',data:anual(2,31,'antecipa'),t:['ME','EPP']},
-    {nome:'DASN-SIMEI',obs:'Declaração anual do MEI',data:anual(4,31,'antecipa'),t:['MEI']}
-  ].filter(x=>x.t.includes(tipo)).sort((a,b)=>a.data-b.data);
-  $('listaVenc').innerHTML=v.map(x=>{
-    const dias=Math.round((x.data-hoje)/864e5);
-    const q=dias===0?'hoje':dias===1?'amanhã':'em '+dias+' dias';
-    return '<li><div class="date"><b>'+String(x.data.getDate()).padStart(2,'0')+'</b><i>'+MESES[x.data.getMonth()]+'</i></div>'+
-      '<div class="what"><strong>'+x.nome+'</strong><small>'+x.obs+'</small></div>'+
-      '<span class="pill '+(dias<=7?'soon':'ok')+'">'+q+'</span></li>';
-  }).join('');
-}
 
 try{ const s=JSON.parse(sessionStorage.getItem('rb_sessao')||'null'); if(s && s.token) abrirPainel(s); }catch(e){}
 </script>
