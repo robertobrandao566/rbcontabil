@@ -22,7 +22,7 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0}
-body{min-height:100vh;background:radial-gradient(120% 80% at 0% 100%, #24170F 0%, transparent 45%), linear-gradient(170deg, var(--navy) 0%, var(--navy-deep) 100%);
+body{min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(120% 80% at 0% 100%, #24170F 0%, transparent 45%), linear-gradient(170deg, var(--navy) 0%, var(--navy-deep) 100%);
   background-color:var(--navy-deep);color:var(--text);font-family:var(--f-body);font-size:15px;line-height:1.5;
   padding-bottom:env(safe-area-inset-bottom,0px)}
 h1,h2,h3{font-family:var(--f-head);margin:0;text-wrap:balance;color:var(--white)}
@@ -36,7 +36,7 @@ a{color:var(--peach)}
 .brandbar img{height:38px;width:auto;max-width:72%}
 .brandbar .wa-mini{font:600 13px var(--f-body);color:#0A1530;text-decoration:none;border:1.5px solid #0A1530;border-radius:999px;padding:6px 12px;white-space:nowrap}
 
-.wrap{max-width:640px;margin:0 auto;padding-inline:16px;padding-block:24px 110px;display:flex;flex-direction:column;gap:26px;position:relative}
+.wrap{flex:1;width:100%;max-width:640px;margin:0 auto;padding-inline:16px;padding-block:24px 40px;display:flex;flex-direction:column;gap:26px;position:relative}
 .deco{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
 .deco i{position:absolute;border:1.5px solid rgba(229,138,80,.28);border-radius:50%}
 .deco i:nth-child(1){width:520px;height:520px;right:-300px;top:80px}
@@ -143,7 +143,7 @@ input::placeholder,textarea::placeholder{color:#56638A}
   font:700 14px var(--f-body);text-decoration:none;padding:12px 16px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
 .fab svg{width:20px;height:20px}
 
-.foot{background:var(--white);border-top:5px solid var(--orange);padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));text-align:center}
+.foot{background:var(--white);border-top:5px solid var(--orange);padding:18px 16px calc(84px + env(safe-area-inset-bottom,0px));text-align:center}
 .foot img{height:44px;width:auto;max-width:90%}
 .foot p{margin:6px 0 0;font-size:12px;color:#55607A}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--white);color:var(--navy);padding:10px 16px;border-radius:999px;font:600 13px var(--f-body);max-width:90vw;text-align:center;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.35)}
@@ -163,19 +163,9 @@ input::placeholder,textarea::placeholder{color:#56638A}
 
 <main class="wrap">
 
-  <!-- Painel de prazos (sempre visível) -->
-  <section class="sec" aria-labelledby="tPrazos">
-    <span class="eyebrow">Próximos vencimentos</span>
-    <div class="card">
-      <div class="next" id="proximo"></div>
-      <ul class="duelist" id="listaVenc"></ul>
-      <p class="fine">Datas ajustadas para fins de semana. Feriados não considerados.</p>
-    </div>
-  </section>
-
   <!-- Acesso -->
   <section class="sec" id="telaAcesso">
-    <div class="sec-head"><div><span class="eyebrow">Área do cliente</span><h2 id="tPrazos">Seus documentos, guias e pedidos num só lugar</h2></div></div>
+    <div class="sec-head"><div><span class="eyebrow">Área do cliente</span><h2>Seus documentos, guias e pedidos num só lugar</h2></div></div>
     <div class="card">
       <div class="tabs" role="tablist">
         <button role="tab" id="tabEntrar" aria-selected="true">Entrar</button>
@@ -216,6 +206,16 @@ input::placeholder,textarea::placeholder{color:#56638A}
       <span class="eyebrow">Área do cliente</span>
       <h1 id="pNome"></h1>
       <div class="row"><span id="pCnpj"></span><span class="tag" id="pTipo"></span><button class="out" id="btnSair">Sair</button></div>
+    </section>
+
+    <!-- Painel de prazos -->
+    <section class="sec" aria-label="Próximos vencimentos">
+      <span class="eyebrow">Próximos vencimentos</span>
+      <div class="card">
+        <div class="next" id="proximo"></div>
+        <ul class="duelist" id="listaVenc"></ul>
+        <p class="fine">Datas ajustadas para fins de semana. Feriados não considerados.</p>
+      </div>
     </section>
 
     <section class="actions" aria-label="Ações rápidas">
@@ -373,7 +373,6 @@ function montarVencimentos(tipo){
       '<span class="chip '+(n<=7?'hot':'cool')+'">'+(n===0?'hoje':n===1?'amanhã':'em '+n+' dias')+'</span></li>';
   }).join('');
 }
-montarVencimentos(null);
 
 /* Acesso */
 function aba(qual){
