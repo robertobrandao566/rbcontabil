@@ -76,6 +76,34 @@ a{color:var(--peach)}
 .chip.cool{background:rgba(179,165,152,.12);color:var(--muted);border:1px solid var(--line)}
 .fine{font-size:12px;color:var(--muted);margin:0}
 
+/* Guias */
+.guias-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.total{font:800 22px var(--f-head);color:var(--white);font-variant-numeric:tabular-nums;text-align:right}
+.total small{display:block;font:600 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.guias{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.guia{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;grid-template-columns:58px 1fr;gap:12px 14px}
+.guia[data-s="vencida"]{border-color:rgba(255,138,128,.55)}
+.guia .gd{border-radius:12px;background:var(--panel-2);text-align:center;padding:8px 0;font-family:var(--f-head);line-height:1;color:var(--white);align-self:start}
+.guia .gd b{display:block;font-size:22px;font-weight:800}
+.guia .gd span{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.guia[data-s="pendente"] .gd{background:rgba(228,87,46,.18)}
+.guia[data-s="vencida"] .gd{background:rgba(255,138,128,.16)}
+.guia .gi{min-width:0;display:flex;flex-direction:column;gap:3px}
+.guia .gt{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.guia strong{color:var(--white);font-size:15px;overflow-wrap:anywhere}
+.guia .gv{font:800 18px var(--f-head);color:var(--white);font-variant-numeric:tabular-nums}
+.guia .gm{font-size:12.5px;color:var(--muted)}
+.gs{font:700 11px var(--f-head);letter-spacing:.05em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.gs.pendente{background:rgba(228,87,46,.16);color:var(--peach)}
+.gs.vencida{background:rgba(255,138,128,.16);color:var(--err)}
+.gs.paga{background:rgba(76,195,138,.16);color:#9BE3BF}
+.guia .ga{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
+.guia .ga .btn{padding:10px 14px;font-size:14px}
+.pagar{grid-column:1/-1;border-top:1px dashed var(--line);padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.pagar p{margin:0;font-size:13.5px}
+details.pagas summary{cursor:pointer;color:var(--muted);font-size:13.5px;padding:4px 0}
+details.pagas[open] summary{margin-bottom:10px}
+
 /* Botões */
 .btn{font:600 15px var(--f-body);padding:13px 18px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--white);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .btn.primary{background:var(--orange);border-color:var(--orange);color:#1D1B19}
@@ -221,6 +249,16 @@ input::placeholder,textarea::placeholder{color:#7A6D63}
         <ul class="duelist" id="listaVenc"></ul>
         <p class="fine">Datas ajustadas para fins de semana. Feriados não considerados.</p>
       </div>
+    </section>
+
+    <!-- Guias -->
+    <section class="sec" aria-labelledby="tGuias">
+      <div class="guias-top">
+        <div><span class="eyebrow">Guias</span><h2 id="tGuias">Guias para pagar</h2></div>
+        <div class="total" id="gTotal" hidden></div>
+      </div>
+      <ul class="guias" id="listaGuias"><li><p class="empty">Carregando…</p></li></ul>
+      <details class="pagas" id="gPagas" hidden><summary id="gPagasTit">Guias pagas</summary><ul class="guias" id="listaPagas"></ul></details>
     </section>
 
     <section class="actions" aria-label="Ações rápidas">
@@ -415,7 +453,7 @@ function abrirPainel(s){
   $('pNome').textContent='Olá, '+s.nome; $('pCnpj').textContent='CNPJ '+s.cnpj; $('pTipo').textContent=s.tipo;
   $('btnDas').hidden = s.tipo!=='MEI';
   montarVencimentos(s.tipo); atualizaWhats();
-  carregarDocs(); carregarSolicitacoes();
+  carregarDocs(); carregarSolicitacoes(); carregarGuias();
 }
 $('btnSair').onclick=async()=>{ try{ await chamar('sair',sessao.token);}catch(e){} try{ sessionStorage.removeItem('rb_sessao'); }catch(e){} location.reload(); };
 $('btnDas').onclick=()=>{ const s=$('secDas'); s.hidden=!s.hidden; if(!s.hidden) s.scrollIntoView({block:'nearest'}); };
@@ -477,6 +515,81 @@ $('formSol').addEventListener('submit', async e=>{
   finally{ b.disabled=false; b.textContent='Enviar solicitação'; }
 });
 
+/* Guias */
+let guias=[];
+const fmtMoeda=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const MESES_G=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function rotuloGuia(g){
+  if(g.situacao==='paga') return 'Paga';
+  if(g.situacao==='vencida') return g.dias===-1?'Venceu ontem':'Vencida há '+(-g.dias)+' dias';
+  return g.dias===0?'Vence hoje':g.dias===1?'Vence amanhã':'Vence em '+g.dias+' dias';
+}
+async function carregarGuias(){
+  try{ guias=await chamar('listarGuias',sessao.token); renderGuias(); }
+  catch(x){ tratarSessao(x); }
+}
+function itemGuia(g){
+  const li=document.createElement('li'); li.className='guia'; li.dataset.s=g.situacao;
+  const [ano,mes,dia]=g.vencimento.split('-');
+  const gd=document.createElement('div'); gd.className='gd';
+  gd.innerHTML='<b>'+dia+'</b><span>'+MESES_G[Number(mes)-1]+'</span>';
+  const gi=document.createElement('div'); gi.className='gi';
+  const gt=document.createElement('div'); gt.className='gt';
+  const nm=document.createElement('strong'); nm.textContent=g.tipo+' · '+g.competencia;
+  const st=document.createElement('span'); st.className='gs '+g.situacao; st.textContent=rotuloGuia(g);
+  gt.append(nm,st);
+  const gv=document.createElement('div'); gv.className='gv'; gv.textContent=fmtMoeda(g.valor);
+  const gm=document.createElement('div'); gm.className='gm';
+  gm.textContent='Vencimento '+dia+'/'+mes+'/'+ano+(g.situacao==='paga'&&g.pagoEm?' · pagamento informado em '+g.pagoEm.split('-').reverse().join('/'):'');
+  gi.append(gt,gv,gm);
+  li.append(gd,gi);
+  const ga=document.createElement('div'); ga.className='ga';
+  if(g.arquivoId){ const b=document.createElement('button'); b.className='btn'+(g.situacao==='paga'?' ghost':''); b.type='button'; b.textContent='Baixar guia'; b.onclick=()=>baixar(g.arquivoId,b,'Baixar guia'); ga.append(b); }
+  if(g.situacao!=='paga'){
+    const p=document.createElement('button'); p.className='btn primary'; p.type='button'; p.textContent='Informar pagamento';
+    p.onclick=()=>abrirPagar(li,g,p); ga.append(p);
+  }
+  li.append(ga);
+  return li;
+}
+function abrirPagar(li,g,botao){
+  if(li.querySelector('.pagar')) return;
+  botao.hidden=true;
+  const box=document.createElement('div'); box.className='pagar';
+  const p=document.createElement('p'); p.textContent='Anexe o comprovante. É opcional, mas ajuda o escritório a conferir.';
+  const id='comp_'+g.id;
+  const lab=document.createElement('label'); lab.className='f'; lab.htmlFor=id; lab.textContent='Comprovante (foto ou PDF)';
+  const inp=document.createElement('input'); inp.type='file'; inp.id=id; inp.accept='image/*,application/pdf'; lab.append(inp);
+  const row=document.createElement('div'); row.style.cssText='display:flex;gap:8px;flex-wrap:wrap';
+  const ok=document.createElement('button'); ok.className='btn primary'; ok.type='button'; ok.textContent='Confirmar pagamento';
+  const cancel=document.createElement('button'); cancel.className='btn ghost'; cancel.type='button'; cancel.textContent='Cancelar';
+  cancel.onclick=()=>{ box.remove(); botao.hidden=false; };
+  ok.onclick=async()=>{
+    const f=inp.files[0];
+    if(f && f.size>10*1024*1024){ toast('O comprovante passa de 10 MB'); return; }
+    ok.disabled=true; ok.textContent='Enviando…';
+    try{
+      const arq=f?{nome:f.name,tipo:f.type,base64:await lerBase64(f)}:null;
+      guias=await chamar('informarPagamento',sessao.token,g.id,arq);
+      renderGuias(); carregarDocs(); toast('Pagamento informado. Obrigado!');
+    }catch(x){ tratarSessao(x); ok.disabled=false; ok.textContent='Confirmar pagamento'; }
+  };
+  row.append(ok,cancel); box.append(p,lab,row); li.append(box);
+}
+function renderGuias(){
+  const abertas=guias.filter(g=>g.situacao!=='paga'), pagas=guias.filter(g=>g.situacao==='paga');
+  const ul=$('listaGuias'); ul.innerHTML='';
+  if(!abertas.length){
+    ul.innerHTML='<li><p class="empty">'+(guias.length?'Tudo em dia: nenhuma guia em aberto.':'Quando o escritório publicar uma guia, ela aparece aqui com o valor e o vencimento. Você também recebe um aviso por e-mail.')+'</p></li>';
+  } else abertas.forEach(g=>ul.append(itemGuia(g)));
+  const tot=abertas.reduce((s,g)=>s+g.valor,0);
+  $('gTotal').hidden=!abertas.length;
+  $('gTotal').innerHTML='<small>Total em aberto</small>'+fmtMoeda(tot);
+  $('gPagas').hidden=!pagas.length;
+  $('gPagasTit').textContent='Guias pagas ('+pagas.length+')';
+  const up=$('listaPagas'); up.innerHTML=''; pagas.slice(0,12).forEach(g=>up.append(itemGuia(g)));
+}
+
 /* Documentos */
 function renderLista(el, arquivos, vazio){
   el.innerHTML='';
@@ -496,7 +609,7 @@ async function carregarDocs(){
     renderLista($('listaEnviados'),r.enviados,'Você ainda não enviou documentos.');
   }catch(x){ tratarSessao(x); }
 }
-async function baixar(id,btn){
+async function baixar(id,btn,rotulo){
   btn.disabled=true; btn.textContent='Baixando…';
   try{
     const f=await chamar('baixarDocumento',sessao.token,id);
@@ -506,7 +619,7 @@ async function baixar(id,btn){
     const a=document.createElement('a'); a.href=url; a.download=f.nome; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),30000);
   }catch(x){ tratarSessao(x); }
-  finally{ btn.disabled=false; btn.textContent='Baixar'; }
+  finally{ btn.disabled=false; btn.textContent=rotulo||'Baixar'; }
 }
 function lerBase64(file){ return new Promise((ok,falha)=>{ const r=new FileReader(); r.onload=()=>ok(String(r.result).split(',')[1]); r.onerror=falha; r.readAsDataURL(file); }); }
 async function enviar(files){
