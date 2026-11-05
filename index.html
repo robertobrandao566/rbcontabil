@@ -3,26 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0A1530">
-<title>RB Soluções Contábeis · Área do Cliente</title>
-<link rel="icon" href="logo.png">
+<meta name="theme-color" content="#1D1B19">
+<title>Menu Contabilidade · Área do Cliente</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <style>
-/* Identidade RB: azul-marinho profundo, laranja de destaque, pêssego para chamadas, dourado da logo */
+/* Identidade Menu Contabilidade: grafite, laranja tomate, creme e marrom (mesma paleta do site e dos posts) */
 :root{
-  --navy:#0A1530; --navy-deep:#050B1A; --panel:#101E3F; --panel-2:#14254B; --line:#22345E;
-  --white:#FFFFFF; --text:#E8ECF5; --muted:#8C99B8;
-  --orange:#E58A50; --peach:#F4B58C; --gold:#C9A24A;
-  --ok:#4CC38A; --run:#5AA7F2; --wait:#E58A50; --err:#FF8A80;
-  --f-head:"Montserrat","Segoe UI",system-ui,sans-serif;
-  --f-body:"Inter","Segoe UI",system-ui,sans-serif;
+  --navy:#1D1B19; --navy-deep:#141210; --panel:#26221F; --panel-2:#2E2925; --line:#3D3530;
+  --white:#FFFFFF; --text:#F3ECE4; --muted:#B3A598;
+  --orange:#E4572E; --peach:#F3A88E; --gold:#FFF8F0;
+  --ok:#4CC38A; --run:#5AA7F2; --wait:#E4572E; --err:#FF8A80;
+  --f-head:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
+  --f-body:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
-body{min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(120% 80% at 0% 100%, #24170F 0%, transparent 45%), linear-gradient(170deg, var(--navy) 0%, var(--navy-deep) 100%);
+body{min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(120% 80% at 0% 100%, #3A1C10 0%, transparent 45%), linear-gradient(170deg, var(--navy) 0%, var(--navy-deep) 100%);
   background-color:var(--navy-deep);color:var(--text);font-family:var(--f-body);font-size:15px;line-height:1.5;
   padding-bottom:env(safe-area-inset-bottom,0px)}
 h1,h2,h3{font-family:var(--f-head);margin:0;text-wrap:balance;color:var(--white)}
@@ -31,21 +31,26 @@ a{color:var(--peach)}
 [hidden]{display:none!important}
 
 /* Faixa da marca (igual aos posts) */
-.brandbar{background:var(--white);border-bottom:5px solid var(--orange);padding:14px 16px calc(14px);padding-top:calc(14px + env(safe-area-inset-top,0px))}
+.brandbar{position:relative;z-index:2;background:var(--white);border-bottom:5px solid var(--orange);padding:14px 16px calc(14px);padding-top:calc(14px + env(safe-area-inset-top,0px))}
 .brandbar .in{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brandbar img{height:38px;width:auto;max-width:72%}
-.brandbar .wa-mini{font:600 13px var(--f-body);color:#0A1530;text-decoration:none;border:1.5px solid #0A1530;border-radius:999px;padding:6px 12px;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.brand .logo{width:30px;height:38px;flex:none}
+.brand b{display:block;font:800 19px var(--f-head);letter-spacing:-.03em;color:#1D1B19;line-height:1.1}
+.brand b span{color:var(--orange)}
+.brand small{display:block;font:600 10.5px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:#6A5D55;margin-top:1px}
+.foot .brand{justify-content:center}
+.brandbar .wa-mini{font:600 13px var(--f-body);color:#1D1B19;text-decoration:none;border:1.5px solid #1D1B19;border-radius:999px;padding:6px 12px;white-space:nowrap}
 
 .wrap{flex:1;width:100%;max-width:640px;margin:0 auto;padding-inline:16px;padding-block:24px 40px;display:flex;flex-direction:column;gap:26px;position:relative}
 .deco{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
-.deco i{position:absolute;border:1.5px solid rgba(229,138,80,.28);border-radius:50%}
+.deco i{position:absolute;border:1.5px solid rgba(228,87,46,.28);border-radius:50%}
 .deco i:nth-child(1){width:520px;height:520px;right:-300px;top:80px}
 .deco i:nth-child(2){width:620px;height:620px;left:-420px;bottom:-260px}
 .wrap>*{position:relative;z-index:1}
 
 .eyebrow{font:700 12px var(--f-head);letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
 .lead{color:var(--muted);margin:0}
-.card{background:linear-gradient(180deg, rgba(20,37,75,.85), rgba(16,30,63,.85));border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(4px)}
+.card{background:linear-gradient(180deg, rgba(46,41,37,.92), rgba(38,34,31,.92));border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(4px)}
 .sec{display:flex;flex-direction:column;gap:12px}
 .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .sec-head h2{font-size:21px;font-weight:800}
@@ -53,7 +58,7 @@ a{color:var(--peach)}
 
 /* Prazos */
 .next{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
-.bigdate{width:86px;text-align:center;border-radius:14px;background:var(--orange);color:#1A0E06;padding:10px 0;font-family:var(--f-head);line-height:1}
+.bigdate{width:86px;text-align:center;border-radius:14px;background:var(--orange);color:#1D1B19;padding:10px 0;font-family:var(--f-head);line-height:1}
 .bigdate b{display:block;font-size:34px;font-weight:800}
 .bigdate span{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
 .next h3{font-size:19px}
@@ -67,20 +72,20 @@ a{color:var(--peach)}
 .duelist .w strong{display:block;font-weight:600;font-size:14.5px;color:var(--white)}
 .duelist .w span{font-size:12.5px;color:var(--muted)}
 .chip{font:600 11.5px var(--f-body);padding:4px 10px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
-.chip.hot{background:rgba(229,138,80,.18);color:var(--peach);border:1px solid rgba(229,138,80,.45)}
-.chip.cool{background:rgba(140,153,184,.12);color:var(--muted);border:1px solid var(--line)}
+.chip.hot{background:rgba(228,87,46,.18);color:var(--peach);border:1px solid rgba(228,87,46,.45)}
+.chip.cool{background:rgba(179,165,152,.12);color:var(--muted);border:1px solid var(--line)}
 .fine{font-size:12px;color:var(--muted);margin:0}
 
 /* Botões */
 .btn{font:600 15px var(--f-body);padding:13px 18px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--white);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.btn.primary{background:var(--orange);border-color:var(--orange);color:#1A0E06}
+.btn.primary{background:var(--orange);border-color:var(--orange);color:#1D1B19}
 .btn.ghost{background:transparent}
 .btn:disabled{opacity:.6;cursor:wait}
 .btn svg{width:18px;height:18px}
 .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .action{display:flex;flex-direction:column;gap:8px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;text-decoration:none;color:var(--white);font:600 14px var(--f-body);cursor:pointer;min-width:0;text-align:left}
 .action:hover{border-color:var(--orange)}
-.action .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(229,138,80,.15);color:var(--orange)}
+.action .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(228,87,46,.15);color:var(--orange)}
 .action.wa .ic{background:rgba(76,195,138,.15);color:var(--ok)}
 .action small{font:400 12px var(--f-body);color:var(--muted)}
 .ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -88,12 +93,12 @@ a{color:var(--peach)}
 /* Formulários */
 .tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--navy-deep);border-radius:12px;padding:4px;gap:4px;border:1px solid var(--line)}
 .tabs button{font:600 14px var(--f-body);border:0;border-radius:9px;padding:10px;background:transparent;color:var(--muted);cursor:pointer}
-.tabs button[aria-selected="true"]{background:var(--orange);color:#1A0E06}
+.tabs button[aria-selected="true"]{background:var(--orange);color:#1D1B19}
 form{display:flex;flex-direction:column;gap:12px}
 label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:600;color:var(--text)}
 input,select,textarea{font:400 16px var(--f-body);padding:12px 13px;border-radius:11px;border:1px solid var(--line);background:var(--navy-deep);color:var(--white);width:100%}
 textarea{min-height:96px;resize:vertical}
-input::placeholder,textarea::placeholder{color:#56638A}
+input::placeholder,textarea::placeholder{color:#7A6D63}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .msg{font-size:13.5px;padding:10px 12px;border-radius:10px;background:rgba(255,138,128,.12);color:var(--err);border:1px solid rgba(255,138,128,.35)}
 .link{background:none;border:0;padding:0;font:500 13px var(--f-body);color:var(--peach);cursor:pointer;text-decoration:underline;align-self:flex-start}
@@ -102,7 +107,7 @@ input::placeholder,textarea::placeholder{color:#56638A}
 .hello{display:flex;flex-direction:column;gap:6px}
 .hello h1{font-size:28px;font-weight:800;line-height:1.15}
 .hello .row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;color:var(--muted);font-size:13.5px}
-.tag{font:700 11px var(--f-head);letter-spacing:.08em;padding:4px 9px;border-radius:999px;background:var(--gold);color:#1B1305}
+.tag{font:700 11px var(--f-head);letter-spacing:.08em;padding:4px 9px;border-radius:999px;background:var(--gold);color:#1D1B19}
 .out{margin-left:auto;background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:5px 12px;font:500 12.5px var(--f-body);cursor:pointer}
 
 /* Solicitações */
@@ -110,7 +115,7 @@ input::placeholder,textarea::placeholder{color:#56638A}
 .count{border-radius:12px;padding:10px 12px;border:1px solid var(--line);background:var(--panel);cursor:pointer;text-align:left;color:var(--text);font:inherit}
 .count b{display:block;font:800 22px var(--f-head);color:var(--white)}
 .count span{font-size:12px;color:var(--muted)}
-.count[aria-pressed="true"]{border-color:var(--orange);background:rgba(229,138,80,.1)}
+.count[aria-pressed="true"]{border-color:var(--orange);background:rgba(228,87,46,.1)}
 .count .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
 .reqs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
 .req{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--wait);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:6px}
@@ -122,7 +127,7 @@ input::placeholder,textarea::placeholder{color:#56638A}
 .req p{margin:0;font-size:13.5px;color:var(--text);overflow-wrap:anywhere}
 .req .resp{border-top:1px dashed var(--line);padding-top:8px;color:var(--peach);font-size:13.5px}
 .status{font:700 11px var(--f-head);letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
-.status.pendente{background:rgba(229,138,80,.16);color:var(--peach)}
+.status.pendente{background:rgba(228,87,46,.16);color:var(--peach)}
 .status.andamento{background:rgba(90,167,242,.16);color:#A9D0F8}
 .status.concluido{background:rgba(76,195,138,.16);color:#9BE3BF}
 .empty{color:var(--muted);font-size:13.5px;margin:0}
@@ -133,9 +138,9 @@ input::placeholder,textarea::placeholder{color:#56638A}
 .files li:first-child{border-top:0;padding-top:0}
 .files .nm{min-width:0;overflow-wrap:anywhere;font-size:14px;font-weight:500;color:var(--white)}
 .files small{display:block;color:var(--muted);font-size:12px;font-weight:400}
-.files .dl{font:600 13px var(--f-body);color:var(--peach);background:rgba(229,138,80,.12);border:1px solid rgba(229,138,80,.35);border-radius:9px;padding:7px 11px;cursor:pointer}
+.files .dl{font:600 13px var(--f-body);color:var(--peach);background:rgba(228,87,46,.12);border:1px solid rgba(228,87,46,.35);border-radius:9px;padding:7px 11px;cursor:pointer}
 .drop{border:1.5px dashed var(--line);border-radius:12px;padding:18px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;color:var(--muted);font-size:13.5px}
-.drop.over{border-color:var(--orange);background:rgba(229,138,80,.08)}
+.drop.over{border-color:var(--orange);background:rgba(228,87,46,.08)}
 .steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px}
 
 /* WhatsApp flutuante */
@@ -143,9 +148,9 @@ input::placeholder,textarea::placeholder{color:#56638A}
   font:700 14px var(--f-body);text-decoration:none;padding:12px 16px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
 .fab svg{width:20px;height:20px}
 
-.foot{background:var(--white);border-top:5px solid var(--orange);padding:18px 16px calc(84px + env(safe-area-inset-bottom,0px));text-align:center}
-.foot img{height:44px;width:auto;max-width:90%}
-.foot p{margin:6px 0 0;font-size:12px;color:#55607A}
+.foot{position:relative;z-index:2;background:var(--white);border-top:5px solid var(--orange);padding:18px 16px calc(84px + env(safe-area-inset-bottom,0px));text-align:center}
+.foot p{margin:8px 0 0;font-size:12px;color:#6A5D55}
+.foot a{color:#1D1B19}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--white);color:var(--navy);padding:10px 16px;border-radius:999px;font:600 13px var(--f-body);max-width:90vw;text-align:center;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.35)}
 @media (max-width:480px){.actions{grid-template-columns:1fr 1fr}.action.wa{grid-column:1/-1;flex-direction:row;align-items:center;flex-wrap:wrap}.actions:has(#btnDas[hidden]) .action.wa{grid-column:auto;flex-direction:column;align-items:flex-start}.two{grid-template-columns:1fr}.hello h1{font-size:24px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
@@ -154,7 +159,7 @@ input::placeholder,textarea::placeholder{color:#56638A}
 <body>
 <header class="brandbar">
   <div class="in">
-    <img src="logo.png" alt="RB Soluções Contábeis — Contabilidade Digital e Consultiva">
+    <a class="brand" href="https://menucontabil.net.br/" target="_blank" rel="noopener" aria-label="Menu Contabilidade"><svg class="logo" viewBox="-24 0 216 215" aria-hidden="true"><path d="M0 26a26 26 0 0 1 26-26h116a26 26 0 0 1 26 26v171l-16.8 18-16.8-18-16.8 18-16.8-18-16.8 18-16.8-18-16.8 18-16.8-18-16.8 18L0 197z" fill="#E4572E"/><polyline points="25,140 25,64 60,108 95,64 98,98" fill="none" stroke="#FFF8F0" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><polyline points="74,128 94,150 144,97" fill="none" stroke="#FFF8F0" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>menu <span>contabilidade</span></b><small>Área do Cliente</small></span></a>
     <a class="wa-mini" id="waTop" href="#" target="_blank" rel="noopener">WhatsApp</a>
   </div>
 </header>
@@ -195,7 +200,7 @@ input::placeholder,textarea::placeholder{color:#56638A}
         </div>
         <div class="msg" id="erroCadastrar" hidden></div>
         <button class="btn primary" type="submit">Criar meu acesso</button>
-        <p class="fine">Seus dados ficam com a RB Soluções Contábeis e são usados só para a prestação do serviço contábil.</p>
+        <p class="fine">Seus dados ficam com a Menu Contabilidade e são usados só para a prestação do serviço contábil.</p>
       </form>
     </div>
   </section>
@@ -298,8 +303,8 @@ input::placeholder,textarea::placeholder{color:#56638A}
 </main>
 
 <footer class="foot">
-  <img src="logo.png" alt="RB Soluções Contábeis">
-  <p>Roberto Brandão · CRC/CE 30161/O-7 · Fortaleza/CE · <a href="https://www.instagram.com/robertocontador_/" target="_blank" rel="noopener" style="color:#0A1530">@robertocontador_</a></p>
+  <div class="brand" aria-label="Menu Contabilidade"><svg class="logo" viewBox="-24 0 216 215" aria-hidden="true"><path d="M0 26a26 26 0 0 1 26-26h116a26 26 0 0 1 26 26v171l-16.8 18-16.8-18-16.8 18-16.8-18-16.8 18-16.8-18-16.8 18-16.8-18-16.8 18L0 197z" fill="#E4572E"/><polyline points="25,140 25,64 60,108 95,64 98,98" fill="none" stroke="#FFF8F0" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><polyline points="74,128 94,150 144,97" fill="none" stroke="#FFF8F0" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>menu <span>contabilidade</span></b><small>Contabilidade para Food Service</small></span></div>
+  <p>Fortaleza/CE · <a href="https://menucontabil.net.br/" target="_blank" rel="noopener">menucontabil.net.br</a> · <a href="https://www.instagram.com/menucontabil_/" target="_blank" rel="noopener">@menucontabil_</a></p>
 </footer>
 
 <a class="fab" id="waFab" href="#" target="_blank" rel="noopener" aria-label="Fale com o contador no WhatsApp">
@@ -328,7 +333,7 @@ async function chamar(acao, ...args){
 /* WhatsApp */
 function linkWhats(){
   const quem = sessao ? ('Sou ' + sessao.nome + ' (CNPJ ' + sessao.cnpj + '). ') : '';
-  return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent('Olá, Roberto! ' + quem + 'Vim pelo app da RB Soluções Contábeis.');
+  return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent('Olá! ' + quem + 'Vim pelo app da Menu Contabilidade.');
 }
 function atualizaWhats(){ ['waTop','waAction','waFab'].forEach(id => $(id).href = linkWhats()); }
 atualizaWhats();
