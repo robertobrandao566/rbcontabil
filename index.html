@@ -6,6 +6,12 @@
 <meta name="theme-color" content="#1D1B19">
 <title>Menu Contabilidade · Área do Cliente</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Menu Contábil">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
@@ -149,6 +155,41 @@ details.pagas[open] summary{margin-bottom:10px}
 .tool small{color:var(--muted);font-size:12.5px}
 @media (max-width:480px){.kpis{grid-template-columns:1fr 1fr}.kpis .kpi:first-child{grid-column:1/-1}.tools{grid-template-columns:1fr}.th-top b{font-size:22px}}
 
+/* Documentos do mês */
+.ck-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.ck-prazo{font-size:13.5px;color:var(--muted)}
+.ck-prazo b{color:var(--white)}
+.ck-prazo.late b{color:var(--err)}
+.ck-bar{height:10px;border-radius:999px;background:var(--navy-deep);border:1px solid var(--line);overflow:hidden}
+.ck-bar i{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .5s ease}
+.ck-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ck-item{display:grid;grid-template-columns:30px 1fr;gap:4px 12px;padding:13px 0;border-top:1px solid var(--line)}
+.ck-item:first-child{border-top:0}
+.ck-ic{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line);margin-top:1px}
+.ck-ic svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.ck-item[data-s="Enviado"] .ck-ic,.ck-item[data-s="Conferido"] .ck-ic{background:var(--ok);border-color:var(--ok);color:#10261B}
+.ck-item[data-s="Sem movimento"] .ck-ic{background:var(--panel-2);border-color:var(--muted);color:var(--muted)}
+.ck-item[data-s="Reenviar"] .ck-ic{border-color:var(--err);color:var(--err)}
+.ck-nome{font-weight:600;color:var(--white);font-size:14.5px}
+.ck-st{grid-column:2;font-size:12.5px;color:var(--muted)}
+.ck-item[data-s="Reenviar"] .ck-st{color:var(--err)}
+.ck-acts{grid-column:2;display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.ck-acts .btn{padding:9px 13px;font-size:13.5px}
+.ck-acts input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.ck-ok{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;background:rgba(76,195,138,.12);border:1px solid rgba(76,195,138,.4);color:#9BE3BF;font-weight:600;font-size:14px}
+/* Instalar app */
+.install{display:grid;grid-template-columns:44px 1fr;gap:6px 14px;align-items:center;background:linear-gradient(135deg,rgba(228,87,46,.22),rgba(38,34,31,.95));border:1px solid rgba(228,87,46,.5);border-radius:16px;padding:14px 16px;position:relative}
+.install img{width:44px;height:44px;border-radius:11px}
+.install b{color:var(--white)}
+.install b.tt{font-size:15px;display:block}
+.install p{margin:0;font-size:13px;color:var(--text)}
+.install .acts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.install .acts .btn{padding:9px 14px;font-size:14px}
+.install .x{position:absolute;top:6px;right:8px;background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 8px;line-height:1}
+.install ol{grid-column:1/-1;margin:4px 0 0;padding-left:20px;font-size:13.5px;color:var(--text)}
+.install ol li{margin:3px 0}
+.ios-share{display:inline-block;width:15px;height:15px;vertical-align:-2px}
+
 /* Botões */
 .btn{font:600 15px var(--f-body);padding:13px 18px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--white);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .btn.primary{background:var(--orange);border-color:var(--orange);color:#1D1B19}
@@ -286,14 +327,36 @@ input::placeholder,textarea::placeholder{color:#7A6D63}
       <div class="row"><span id="pCnpj"></span><span class="tag" id="pTipo"></span><button class="out" id="btnSair">Sair</button></div>
     </section>
 
+    <!-- Instalar o app -->
+    <div class="install" id="cardInstalar" hidden>
+      <img src="icon-192.png" alt="">
+      <div><b class="tt">Tenha o app na tela do celular</b><p id="instTexto">Abra com um toque, como um aplicativo.</p></div>
+      <button class="x" type="button" id="instFechar" aria-label="Fechar">×</button>
+      <div class="acts" id="instAcoes"><button class="btn primary" type="button" id="btnInstalar">Instalar o app</button></div>
+      <ol id="instIos" hidden>
+        <li>Toque em <b>Compartilhar</b> <svg class="ios-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M5 11v9h14v-9"/></svg> na barra do Safari.</li>
+        <li>Escolha <b>Adicionar à Tela de Início</b>.</li>
+        <li>Toque em <b>Adicionar</b>. Pronto!</li>
+      </ol>
+    </div>
+
     <!-- Painel de prazos -->
     <section class="sec" aria-label="Próximos vencimentos">
       <span class="eyebrow">Próximos vencimentos</span>
       <div class="card">
         <div class="next" id="proximo"></div>
         <ul class="duelist" id="listaVenc"></ul>
-        <p class="fine">Datas ajustadas para fins de semana. Feriados não considerados.</p>
+        <p class="fine" id="vencNota">Datas ajustadas para fins de semana. Feriados não considerados.</p>
       </div>
+    </section>
+
+    <!-- Documentos do mês -->
+    <section class="sec" id="secCk" aria-labelledby="tCk" hidden>
+      <div class="ck-top">
+        <div><span class="eyebrow">Documentos do mês</span><h2 id="tCk">Documentos</h2></div>
+        <span class="ck-prazo" id="ckPrazo"></span>
+      </div>
+      <div class="card" id="ckCard"></div>
     </section>
 
     <!-- Guias -->
@@ -448,12 +511,21 @@ mascaraCnpj($('lCnpj')); mascaraCnpj($('cCnpj'));
 
 /* Prazos */
 const MESES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-function montarVencimentos(tipo){
+function montarVencimentos(tipo, lista){
   const hoje=new Date(); hoje.setHours(0,0,0,0);
   const ajusta=(d,modo)=>{ const x=new Date(d); while(x.getDay()===0||x.getDay()===6) x.setDate(x.getDate()+(modo==='posterga'?1:-1)); return x; };
   const proximo=(dia,modo)=>{ for(let m=0;m<3;m++){ const d=ajusta(new Date(hoje.getFullYear(),hoje.getMonth()+m,dia),modo); if(d>=hoje) return d; } };
   const anual=(mes,dia,modo)=>{ let d=ajusta(new Date(hoje.getFullYear(),mes,dia),modo); if(d<hoje) d=ajusta(new Date(hoje.getFullYear()+1,mes,dia),modo); return d; };
-  let v=[
+  const diaMes=(ano,mes,dia)=>new Date(ano,mes,Math.min(dia,new Date(ano,mes+1,0).getDate()));
+  const proxDia=(dia,modo)=>{ for(let m=0;m<3;m++){ const d=ajusta(diaMes(hoje.getFullYear(),hoje.getMonth()+m,dia),modo); if(d>=hoje) return d; } };
+  const anualDia=(mes,dia,modo)=>{ let d=ajusta(diaMes(hoje.getFullYear(),mes,dia),modo); if(d<hoje) d=ajusta(diaMes(hoje.getFullYear()+1,mes,dia),modo); return d; };
+  let v;
+  if(lista&&lista.length){
+    v=lista.map(o=>({nome:o.nome,obs:o.obs,data:o.mes?anualDia(o.mes-1,o.dia,o.modo):proxDia(o.dia,o.modo)}));
+    v.sort((a,b)=>a.data-b.data);
+    $('vencNota').textContent='Calendário montado para a sua empresa. Datas ajustadas para fins de semana; feriados não considerados.';
+  } else {
+  v=[
     {nome:'DAS do MEI',obs:'Imposto mensal do MEI',data:proximo(20,'posterga'),t:['MEI']},
     {nome:'DAS do Simples Nacional',obs:'Apuração no PGDAS-D',data:proximo(20,'posterga'),t:['ME','EPP']},
     {nome:'FGTS Digital',obs:'Para quem tem funcionário registrado',data:proximo(20,'antecipa'),t:['MEI','ME','EPP']},
@@ -464,6 +536,8 @@ function montarVencimentos(tipo){
   if(tipo) v=v.filter(x=>x.t.includes(tipo));
   else v=v.map(x=>({...x, obs:x.obs+' · '+(x.t.length===3?'todos':x.t.join('/'))}));
   v.sort((a,b)=>a.data-b.data);
+  }
+  if(!v.length){ $('proximo').innerHTML='<p class="empty">Nenhum vencimento cadastrado para a sua empresa.</p>'; $('listaVenc').innerHTML=''; return; }
   const dias=d=>Math.round((d-hoje)/864e5);
   const falta=n=>n===0?'Vence hoje':n===1?'Vence amanhã':'Faltam '+n+' dias';
   const p=v[0];
@@ -513,7 +587,7 @@ function abrirPainel(s){
   $('pNome').textContent='Olá, '+s.nome; $('pCnpj').textContent='CNPJ '+s.cnpj; $('pTipo').textContent=s.tipo;
   $('btnDas').hidden = s.tipo!=='MEI';
   montarVencimentos(s.tipo); atualizaWhats();
-  carregarDocs(); carregarSolicitacoes(); carregarGuias(); carregarFaturamento();
+  carregarDocs(); carregarSolicitacoes(); carregarGuias(); carregarFaturamento(); carregarMes(); mostrarInstalar();
 }
 $('btnSair').onclick=async()=>{ try{ await chamar('sair',sessao.token);}catch(e){} try{ sessionStorage.removeItem('rb_sessao'); }catch(e){} location.reload(); };
 $('btnDas').onclick=()=>{ const s=$('secDas'); s.hidden=!s.hidden; if(!s.hidden) s.scrollIntoView({block:'nearest'}); };
@@ -766,6 +840,89 @@ function renderSimples(f,c){
   p.textContent='Estimativas feitas com os números lançados pelo escritório'+(s.mesesComDado<s.mesesNecessarios?' ('+s.mesesComDado+' de '+s.mesesNecessarios+' meses lançados)':'')+'. O valor oficial do DAS sai na apuração do PGDAS-D.';
   c.append(p);
 }
+
+/* Documentos do mês e calendário */
+let mes=null;
+const ICK={ok:'<svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>',dash:'<svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg>',
+  alerta:'<svg viewBox="0 0 24 24"><path d="M12 7v6M12 17h.01"/></svg>'};
+async function carregarMes(){
+  try{ mes=await chamar('meuMes',sessao.token); if(mes.obrigacoes) montarVencimentos(sessao.tipo,mes.obrigacoes); renderCk(); }
+  catch(x){ tratarSessao(x); }
+}
+function renderCk(){
+  const ck=mes&&mes.checklist, sec=$('secCk');
+  if(!ck||!ck.total){ sec.hidden=true; return; }
+  sec.hidden=false;
+  $('tCk').textContent='Documentos de '+ck.rotulo.split(' de ')[0];
+  const [a,m,d]=ck.prazo.split('-'); const limite=new Date(+a,+m-1,+d); const hoje=new Date(); hoje.setHours(0,0,0,0);
+  const atrasado=!ck.completo&&hoje>limite;
+  const pz=$('ckPrazo'); pz.className='ck-prazo'+(atrasado?' late':'');
+  pz.innerHTML=ck.completo?'<b>Tudo enviado</b>':(atrasado?'Prazo era <b>':'Envie até <b>')+d+'/'+m+'</b>';
+  const card=$('ckCard'); card.innerHTML='';
+  const top=document.createElement('div'); top.style.cssText='display:flex;justify-content:space-between;gap:10px;font-size:13.5px;color:var(--muted)';
+  top.innerHTML='<span>Para fecharmos a contabilidade de '+ck.rotulo+'</span><b style="color:var(--white)">'+ck.feitos+' de '+ck.total+'</b>';
+  const bar=document.createElement('div'); bar.className='ck-bar'; bar.setAttribute('role','progressbar'); bar.setAttribute('aria-valuemin','0');
+  bar.setAttribute('aria-valuemax',String(ck.total)); bar.setAttribute('aria-valuenow',String(ck.feitos)); bar.setAttribute('aria-label','Documentos enviados');
+  bar.innerHTML='<i style="width:'+(ck.feitos/ck.total*100)+'%"></i>';
+  card.append(top,bar);
+  if(ck.completo){ const ok=document.createElement('div'); ok.className='ck-ok'; ok.innerHTML=ICK.ok.replace('<svg','<svg width="20" height="20" stroke="currentColor" fill="none" stroke-width="3"')+'<span>Tudo certo! Recebemos os documentos de '+ck.rotulo+'. Obrigado!</span>'; card.append(ok); }
+  const ul=document.createElement('ul'); ul.className='ck-list';
+  ck.itens.forEach(it=>ul.append(itemCk(it)));
+  card.append(ul);
+  const nota=document.createElement('p'); nota.className='fine';
+  nota.textContent='Os arquivos vão direto para a sua pasta no escritório. Pode mandar foto, PDF ou planilha.';
+  card.append(nota);
+}
+function itemCk(it){
+  const li=document.createElement('li'); li.className='ck-item'; li.dataset.s=it.status;
+  const ic=document.createElement('span'); ic.className='ck-ic'; ic.setAttribute('aria-hidden','true');
+  ic.innerHTML=it.status==='Enviado'||it.status==='Conferido'?ICK.ok:it.status==='Sem movimento'?ICK.dash:it.status==='Reenviar'?ICK.alerta:'';
+  const nome=document.createElement('span'); nome.className='ck-nome'; nome.textContent=it.item;
+  const st=document.createElement('span'); st.className='ck-st';
+  const quando=it.data?' em '+new Date(it.data).toLocaleDateString('pt-BR'):'';
+  st.textContent=it.status==='Pendente'?'Falta enviar':it.status==='Enviado'?'Enviado'+quando+(it.arquivos.length>1?' ('+it.arquivos.length+' arquivos)':''):
+    it.status==='Conferido'?'Conferido pelo escritório':it.status==='Sem movimento'?'Sem movimento no mês':'Envie de novo'+(it.obs?': '+it.obs:'');
+  li.append(ic,nome,st);
+  if(it.status!=='Conferido'){
+    const acts=document.createElement('div'); acts.className='ck-acts';
+    const lab=document.createElement('label'); lab.className='btn'+(it.status==='Pendente'||it.status==='Reenviar'?' primary':' ghost');
+    const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*,application/pdf,.xls,.xlsx,.csv,.ofx,.txt';
+    lab.append(document.createTextNode(it.status==='Enviado'?'Enviar mais um arquivo':'Enviar arquivo'),inp);
+    inp.onchange=async()=>{
+      const f=inp.files[0]; if(!f) return;
+      if(f.size>10*1024*1024){ toast('O arquivo passa de 10 MB'); return; }
+      lab.classList.add('disabled'); lab.firstChild.textContent='Enviando…';
+      try{ mes.checklist=await chamar('enviarItemChecklist',sessao.token,it.item,{nome:f.name,tipo:f.type,base64:await lerBase64(f)}); renderCk(); carregarDocs(); toast('"'+it.item+'" enviado'); }
+      catch(x){ tratarSessao(x); renderCk(); }
+    };
+    acts.append(lab);
+    if(it.status==='Pendente'||it.status==='Reenviar'){
+      const sm=document.createElement('button'); sm.type='button'; sm.className='btn ghost'; sm.textContent='Não tive movimento';
+      sm.onclick=async()=>{ sm.disabled=true; try{ mes.checklist=await chamar('marcarSemMovimento',sessao.token,it.item); renderCk(); }catch(x){ tratarSessao(x); sm.disabled=false; } };
+      acts.append(sm);
+    }
+    li.append(acts);
+  }
+  return li;
+}
+
+/* Instalar o app no celular */
+let pedidoInstalar=null;
+const instalado=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const ehIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); pedidoInstalar=e; mostrarInstalar(); });
+window.addEventListener('appinstalled',()=>{ $('cardInstalar').hidden=true; toast('App instalado!'); });
+function mostrarInstalar(){
+  const c=$('cardInstalar'); if(!c||$('telaPainel').hidden) return;
+  let fechado=false; try{ fechado=localStorage.getItem('mc_instalar_fechado')==='1'; }catch(e){}
+  if(instalado()||fechado){ c.hidden=true; return; }
+  if(pedidoInstalar){ c.hidden=false; $('instAcoes').hidden=false; $('instIos').hidden=true; $('instTexto').textContent='Abra com um toque, como um aplicativo. Ocupa quase nada de espaço.'; }
+  else if(ehIOS()){ c.hidden=false; $('instAcoes').hidden=true; $('instIos').hidden=false; $('instTexto').textContent='No iPhone, leva três toques:'; }
+  else c.hidden=true;
+}
+$('btnInstalar').onclick=async()=>{ if(!pedidoInstalar) return; pedidoInstalar.prompt(); const r=await pedidoInstalar.userChoice; pedidoInstalar=null; if(r.outcome==='accepted') $('cardInstalar').hidden=true; };
+$('instFechar').onclick=()=>{ $('cardInstalar').hidden=true; try{ localStorage.setItem('mc_instalar_fechado','1'); }catch(e){} };
+if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 /* Documentos */
 function renderLista(el, arquivos, vazio){

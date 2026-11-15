@@ -121,6 +121,25 @@ table.fat input.mudou{border-color:var(--orange)}
 .kv div{background:var(--panel-2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
 .kv small{font-size:11.5px;color:var(--muted)}
 .kv b{font-size:17px;color:var(--white);font-variant-numeric:tabular-nums}
+.ck-adm{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ck-adm li{display:flex;flex-direction:column;gap:8px;padding:11px 0;border-top:1px solid var(--line)}
+.ck-adm li:first-child{border-top:0}
+.chip.ck-pendente{background:rgba(179,165,152,.16);color:var(--muted)}
+.chip.ck-enviado{background:rgba(90,167,242,.16);color:#A9D0F8}
+.chip.ck-conferido{background:rgba(76,195,138,.16);color:#9BE3BF}
+.chip.ck-sem{background:rgba(179,165,152,.12);color:var(--muted)}
+.chip.ck-reenviar{background:rgba(255,138,128,.16);color:var(--err)}
+.reenv{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.reenv input{flex:1;min-width:200px}
+.ext-row{display:grid;grid-template-columns:minmax(0,2.2fr) 70px minmax(0,1.2fr) minmax(0,1.1fr) 36px;gap:8px;align-items:end}
+.ext-row .del{height:40px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;font-size:18px}
+.ext-row .del:hover{color:var(--err);border-color:var(--err)}
+.checks{display:flex;gap:18px;flex-wrap:wrap}
+.checks label{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--white);cursor:pointer}
+.checks input{width:18px;height:18px;accent-color:var(--orange)}
+.obr{display:flex;flex-wrap:wrap;gap:6px}
+.obr span{font-size:12.5px;padding:5px 10px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);color:var(--text)}
+@media (max-width:640px){.ext-row{grid-template-columns:1fr 70px}.ext-row .del{grid-column:2}}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--cream);color:#1D1B19;padding:10px 16px;border-radius:999px;font:600 13px var(--f);max-width:90vw;text-align:center;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.35)}
 @media (max-width:860px){.cols{grid-template-columns:1fr}.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:520px){.grid2{grid-template-columns:1fr}.resp{grid-template-columns:1fr}.who span{display:none}}
@@ -172,6 +191,10 @@ table.fat input.mudou{border-color:var(--orange)}
           <div class="li-top"><h3>Guias que pedem atenção</h3><span class="meta">vencidas e próximos 7 dias</span></div>
           <ul class="list" id="rGuias"></ul>
         </div>
+      </div>
+      <div class="card">
+        <div class="li-top"><h3 id="rDocsTit">Documentos do mês pendentes</h3><span class="meta">prazo: dia 10</span></div>
+        <ul class="list" id="rDocs"></ul>
       </div>
       <div class="card">
         <div class="li-top"><h3>MEIs perto do limite</h3><span class="meta">70% ou mais do limite do ano</span></div>
@@ -241,6 +264,29 @@ table.fat input.mudou{border-color:var(--orange)}
         <div class="fat-wrap"><table class="fat"><thead><tr><th>Mês</th><th>Receita bruta (R$)</th><th class="colFolha">Folha (R$)</th><th>Lançado por</th></tr></thead><tbody id="fTab"></tbody></table></div>
         <div class="row" style="justify-content:space-between"><span class="fine">Só os meses alterados são salvos. Folha para o fator R = salários + pró-labore + FGTS + INSS patronal.</span>
           <button class="btn primary" id="btnSalvarFat" type="button">Salvar faturamento</button></div>
+      </div>
+
+      <div class="card" id="cCk">
+        <div class="li-top"><h3 id="ckTitulo">Documentos do mês</h3><span class="meta" id="ckResumo"></span></div>
+        <div class="mini-bar" id="ckBar"><i style="width:0"></i></div>
+        <ul class="ck-adm" id="ckLista"></ul>
+        <p class="fine" id="ckAnterior"></p>
+      </div>
+
+      <div class="card" id="cPerfil">
+        <div class="li-top"><h3>Perfil, calendário e checklist</h3><span class="meta">define o que o cliente vê em vencimentos e documentos</span></div>
+        <div class="checks">
+          <label><input type="checkbox" id="pFunc"> Tem funcionários registrados</label>
+          <label><input type="checkbox" id="pPro"> Paga pró-labore</label>
+        </div>
+        <label class="f" for="pItens">Checklist do mês (um item por linha)<textarea id="pItens" rows="4" aria-describedby="pItensAj"></textarea></label>
+        <p class="fine" id="pItensAj">Deixe em branco para usar a lista padrão do regime (aparece em cinza). O cliente envia até o dia 10 os documentos do mês anterior.</p>
+        <div><b style="font-size:13.5px;color:var(--white)">Outras obrigações do cliente</b>
+          <p class="fine" style="margin-top:2px">Ex.: ICMS antecipação, ISS fixo, parcelamento, alvará, taxa do bombeiro. Entram no calendário dele.</p></div>
+        <div id="pExtras" style="display:flex;flex-direction:column;gap:8px"></div>
+        <div class="row"><button class="btn sm" type="button" id="pAddExtra">+ Obrigação</button></div>
+        <div><span class="meta">Calendário que o cliente vê:</span><div class="obr" id="pObr" style="margin-top:6px"></div></div>
+        <div class="row" style="justify-content:flex-end"><button class="btn primary" type="button" id="btnPerfil">Salvar perfil</button></div>
       </div>
 
       <div class="card"><h3>Guias</h3><ul class="list" id="dGuias"></ul></div>
@@ -363,6 +409,16 @@ async function carregarResumo(){
       const b=el('button','btn sm','Abrir cliente'); b.type='button'; b.onclick=()=>abrirCliente(g.cnpj); li.append(b);
       ug.append(li);
     });
+    const ud=$('rDocs'); ud.innerHTML='';
+    $('rDocsTit').textContent='Documentos de '+(r.compReferencia||'').split(' de ')[0]+' pendentes';
+    if(!(r.docsPendentes||[]).length) ud.innerHTML='<li><p class="empty">Todos os clientes enviaram os documentos do mês.</p></li>';
+    (r.docsPendentes||[]).forEach(x=>{
+      const li=el('li'); const top=el('div','li-top');
+      const t=el('div'); t.append(el('strong','',x.nome),el('div','meta',x.cnpj+(x.reenviar?' · '+x.reenviar+' para reenviar':'')));
+      top.append(t,el('span','chip '+(x.feitos?'andamento':'pendente'),x.feitos+' de '+x.total));
+      const b=el('button','btn sm','Abrir cliente'); b.type='button'; b.onclick=()=>abrirCliente(x.cnpj);
+      li.append(top,b); ud.append(li);
+    });
     const um=$('rMei'); um.innerHTML='';
     if(!(r.meisAtencao||[]).length) um.innerHTML='<li><p class="empty">Nenhum MEI acima de 70% do limite.</p></li>';
     (r.meisAtencao||[]).forEach(m=>{
@@ -449,6 +505,7 @@ function renderDetalhe(d){
   lista($('dEnv'),d.enviados,'O cliente ainda não enviou documentos.');
   lista($('dEsc'),d.doEscritorio,'Nada enviado pelo escritório ainda.');
   renderFiscal(d.fiscal);
+  renderPerfil(d.perfil);
 }
 $('dStatus').addEventListener('change',async e=>{
   try{ await chamar('adminStatusCliente',sess.token,atual.cliente.cnpj,e.target.value);
@@ -456,6 +513,76 @@ $('dStatus').addEventListener('change',async e=>{
   catch(x){ toast(x.message); e.target.value=atual.cliente.status; }
 });
 
+
+/* Documentos do mês e perfil */
+const CK_CLS={'Pendente':'ck-pendente','Enviado':'ck-enviado','Conferido':'ck-conferido','Sem movimento':'ck-sem','Reenviar':'ck-reenviar'};
+const MES_NOME=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+function renderPerfil(p){
+  if(!p){ $('cCk').hidden=true; $('cPerfil').hidden=true; return; }
+  $('cPerfil').hidden=false;
+  const ck=p.checklist;
+  $('cCk').hidden=!ck||!ck.total;
+  if(ck&&ck.total){
+    $('ckTitulo').textContent='Documentos de '+ck.rotulo;
+    $('ckResumo').textContent=ck.feitos+' de '+ck.total+' prontos · prazo '+dBR(ck.prazo);
+    const bar=$('ckBar'); bar.className='mini-bar'+(ck.completo?'':ck.feitos?' warn':' hot'); bar.firstElementChild.style.width=(ck.feitos/ck.total*100)+'%';
+    const ul=$('ckLista'); ul.innerHTML='';
+    ck.itens.forEach(it=>{
+      const li=el('li'); const top=el('div','li-top');
+      const t=el('div'); t.append(el('strong','',it.item),el('div','meta',(it.data?'atualizado em '+dBR(it.data):'aguardando o cliente')+(it.obs?' · '+it.obs:'')));
+      top.append(t,el('span','chip '+(CK_CLS[it.status]||'ck-pendente'),it.status)); li.append(top);
+      const row=el('div','row');
+      it.arquivos.forEach((id,i)=>{ const b=el('button','btn sm',it.arquivos.length>1?'Baixar arquivo '+(i+1):'Baixar arquivo'); b.type='button'; b.onclick=()=>baixar(id,b); row.append(b); });
+      if(it.status==='Enviado'||it.status==='Sem movimento'){
+        const c=el('button','btn sm primary','Conferido'); c.type='button';
+        c.onclick=async()=>{ c.disabled=true; try{ renderDetalhe(await chamar('adminAtualizarItem',sess.token,atual.cliente.cnpj,ck.comp,it.item,'Conferido','')); toast('Item conferido'); }catch(x){ toast(x.message); c.disabled=false; } };
+        row.append(c);
+      }
+      if(it.status!=='Pendente'&&it.status!=='Reenviar'){
+        const r=el('button','btn sm','Pedir reenvio'); r.type='button';
+        r.onclick=()=>{
+          if(li.querySelector('.reenv')) return;
+          const box=el('div','reenv'); const inp=el('input'); inp.placeholder='Motivo (o cliente recebe por e-mail)'; inp.setAttribute('aria-label','Motivo do reenvio');
+          const ok=el('button','btn sm primary','Enviar pedido'); ok.type='button';
+          ok.onclick=async()=>{ ok.disabled=true; try{ renderDetalhe(await chamar('adminAtualizarItem',sess.token,atual.cliente.cnpj,ck.comp,it.item,'Reenviar',inp.value)); toast('Cliente avisado'); }catch(x){ toast(x.message); ok.disabled=false; } };
+          box.append(inp,ok); li.append(box); inp.focus();
+        };
+        row.append(r);
+      }
+      if(row.childElementCount) li.append(row);
+      ul.append(li);
+    });
+    const ant=p.checklistAnterior;
+    $('ckAnterior').textContent=ant&&ant.total&&ant.feitos?'Mês anterior ('+ant.rotulo+'): '+ant.feitos+' de '+ant.total+(ant.completo?' · completo':' · incompleto'):'';
+  }
+  $('pFunc').checked=!!p.funcionarios; $('pPro').checked=!!p.prolabore;
+  $('pItens').value=p.itensPersonalizados?p.itens.join('\n'):'';
+  $('pItens').placeholder=(p.itensPadrao||[]).join('\n')||'Sem checklist para este regime';
+  const ex=$('pExtras'); ex.innerHTML='';
+  (p.extras||[]).forEach(x=>ex.append(linhaExtra(x)));
+  $('pObr').innerHTML='';
+  (p.obrigacoes||[]).forEach(o=>$('pObr').append(el('span','',o.nome+' · '+(o.mes?String(o.dia).padStart(2,'0')+'/'+String(o.mes).padStart(2,'0'):'dia '+o.dia))));
+}
+function linhaExtra(x={}){
+  const r=el('div','ext-row');
+  const campo=(rot,inp)=>{ const l=el('label','f'); l.append(rot,inp); return l; };
+  const nome=el('input'); nome.value=x.nome||''; nome.placeholder='Ex.: ICMS antecipação'; nome.dataset.k='nome';
+  const dia=el('input'); dia.type='number'; dia.min=1; dia.max=31; dia.value=x.dia||''; dia.dataset.k='dia';
+  const mes=el('select'); mes.dataset.k='mes';
+  [['','Todo mês']].concat(MES_NOME.map((m,i)=>[String(i+1),'Anual: '+m])).forEach(([v,t])=>{ const o=el('option','',t); o.value=v; mes.append(o); }); mes.value=x.mes?String(x.mes):'';
+  const modo=el('select'); modo.dataset.k='modo';
+  [['antecipa','Fim de semana: antecipa'],['posterga','Fim de semana: adia']].forEach(([v,t])=>{ const o=el('option','',t); o.value=v; modo.append(o); }); modo.value=x.modo||'antecipa';
+  const del=el('button','del','×'); del.type='button'; del.setAttribute('aria-label','Remover obrigação'); del.onclick=()=>r.remove();
+  r.append(campo('Obrigação',nome),campo('Dia',dia),campo('Frequência',mes),campo('Regra',modo),del);
+  return r;
+}
+$('pAddExtra').onclick=()=>{ const r=linhaExtra(); $('pExtras').append(r); r.querySelector('input').focus(); };
+$('btnPerfil').onclick=async()=>{
+  const extras=[...document.querySelectorAll('#pExtras .ext-row')].map(r=>{ const o={}; r.querySelectorAll('[data-k]').forEach(i=>o[i.dataset.k]=i.value); return o; });
+  const b=$('btnPerfil'); b.disabled=true; b.textContent='Salvando…';
+  try{ renderDetalhe(await chamar('adminSalvarPerfil',sess.token,atual.cliente.cnpj,{funcionarios:$('pFunc').checked,prolabore:$('pPro').checked,itens:$('pItens').value,extras:extras})); toast('Perfil salvo'); }
+  catch(x){ toast(x.message); } finally{ b.disabled=false; b.textContent='Salvar perfil'; }
+};
 
 /* Faturamento e enquadramento */
 const MESES_AB=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
