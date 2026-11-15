@@ -204,6 +204,29 @@ details.pagas[open] summary{margin-bottom:10px}
 .action small{font:400 12px var(--f-body);color:var(--muted)}
 .ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
+/* Botões que expandem */
+.ac-lista{display:flex;flex-direction:column;gap:10px}
+.ac{display:flex;flex-direction:column}
+.ac-btn{display:grid;grid-template-columns:40px 1fr auto 20px;gap:12px;align-items:center;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 14px 14px 12px;color:var(--white);font:inherit;cursor:pointer;transition:border-color .15s,background .15s}
+.ac-btn:hover{border-color:rgba(228,87,46,.6)}
+.ac-btn .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(228,87,46,.15);color:var(--orange)}
+.ac-t{min-width:0;display:flex;flex-direction:column;gap:2px}
+.ac-t b{font:700 16px var(--f-head);color:var(--white)}
+.ac-t small{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.ac-t small .late, .ac-t small.late{color:var(--peach)}
+.ac-t small b{font:inherit;color:var(--white)}
+.ac-badge{font:700 12px var(--f-body);padding:4px 9px;border-radius:999px;background:rgba(179,165,152,.12);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.ac-badge.hot{background:rgba(228,87,46,.18);color:var(--peach);border-color:rgba(228,87,46,.45)}
+.ac-badge.ok{background:rgba(76,195,138,.14);color:var(--ok);border-color:rgba(76,195,138,.4)}
+.ac-badge{grid-column:3}
+.ac-chev{grid-column:4;width:20px;height:20px;fill:none;stroke:var(--muted);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.ac-btn[aria-expanded="true"]{border-color:var(--orange);border-bottom-left-radius:6px;border-bottom-right-radius:6px;background:var(--panel-2)}
+.ac-btn[aria-expanded="true"] .ac-chev{transform:rotate(180deg);stroke:var(--orange)}
+.ac-body{display:flex;flex-direction:column;gap:12px;padding:12px 0 6px}
+.ac-body > .btn{align-self:flex-start}
+@media (max-width:480px){.ac-btn{grid-template-columns:36px 1fr auto 18px;gap:10px;padding:12px 12px 12px 10px}.ac-btn .ic{width:36px;height:36px}.ac-t b{font-size:15px}}
+@media (prefers-reduced-motion:reduce){.ac-chev{transition:none}}
+
 /* Formulários */
 .tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--navy-deep);border-radius:12px;padding:4px;gap:4px;border:1px solid var(--line)}
 .tabs button{font:600 14px var(--f-body);border:0;border-radius:9px;padding:10px;background:transparent;color:var(--muted);cursor:pointer}
@@ -340,68 +363,38 @@ input::placeholder,textarea::placeholder{color:#7A6D63}
       </ol>
     </div>
 
-    <!-- Painel de prazos -->
-    <section class="sec" aria-label="Próximos vencimentos">
-      <span class="eyebrow">Próximos vencimentos</span>
-      <div class="card">
-        <div class="next" id="proximo"></div>
-        <ul class="duelist" id="listaVenc"></ul>
-        <p class="fine" id="vencNota">Datas ajustadas para fins de semana. Feriados não considerados.</p>
+    <nav class="ac-lista" aria-label="Seções da sua área">
+    <!-- Próximos vencimentos -->
+    <section class="ac" id="acVenc">
+      <button class="ac-btn" type="button" id="acVencBtn" aria-expanded="false" aria-controls="acVencBody"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span class="ac-t"><b>Próximos vencimentos</b><small id="acVencSub">Carregando…</small></span><span class="ac-badge" id="acVencBadge" hidden></span><svg class="ac-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="ac-body" id="acVencBody" hidden>
+        <div class="card">
+          <div class="next" id="proximo"></div>
+          <ul class="duelist" id="listaVenc"></ul>
+          <p class="fine" id="vencNota">Datas ajustadas para fins de semana. Feriados não considerados.</p>
+        </div>
       </div>
     </section>
 
     <!-- Documentos do mês -->
-    <section class="sec" id="secCk" aria-labelledby="tCk" hidden>
-      <div class="ck-top">
-        <div><span class="eyebrow">Documentos do mês</span><h2 id="tCk">Documentos</h2></div>
-        <span class="ck-prazo" id="ckPrazo"></span>
+    <section class="ac" id="secCk" hidden>
+      <button class="ac-btn" type="button" id="acCkBtn" aria-expanded="false" aria-controls="acCkBody"><span class="ic"><svg viewBox="0 0 24 24"><path d="M9 5h10M9 12h10M9 19h10"/><path d="M4 5l1 1 2-2M4 12l1 1 2-2M4 19l1 1 2-2"/></svg></span><span class="ac-t"><b id="tCk">Documentos do mês</b><small id="acCkSub"><span id="ckPrazo"></span></small></span><span class="ac-badge" id="acCkBadge" hidden></span><svg class="ac-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="ac-body" id="acCkBody" hidden>
+        <div class="card" id="ckCard"></div>
       </div>
-      <div class="card" id="ckCard"></div>
     </section>
 
     <!-- Guias -->
-    <section class="sec" aria-labelledby="tGuias">
-      <div class="guias-top">
-        <div><span class="eyebrow">Guias</span><h2 id="tGuias">Guias para pagar</h2></div>
+    <section class="ac" id="acGuias">
+      <button class="ac-btn" type="button" id="acGuiasBtn" aria-expanded="false" aria-controls="acGuiasBody"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span><span class="ac-t"><b>Guias para pagar</b><small id="acGuiasSub">Carregando…</small></span><span class="ac-badge" id="acGuiasBadge" hidden></span><svg class="ac-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="ac-body" id="acGuiasBody" hidden>
         <div class="total" id="gTotal" hidden></div>
-      </div>
-      <ul class="guias" id="listaGuias"><li><p class="empty">Carregando…</p></li></ul>
-      <details class="pagas" id="gPagas" hidden><summary id="gPagasTit">Guias pagas</summary><ul class="guias" id="listaPagas"></ul></details>
-    </section>
-
-    <!-- Faturamento (termômetro do MEI / painel do Simples) -->
-    <section class="sec" id="secFat" aria-labelledby="tFat" hidden>
-      <div><span class="eyebrow" id="fEyebrow">Faturamento</span><h2 id="tFat">Seu faturamento</h2></div>
-      <div id="fCorpo" style="display:flex;flex-direction:column;gap:12px"></div>
-    </section>
-
-    <!-- Ferramentas -->
-    <section class="sec" aria-labelledby="tFer">
-      <div><span class="eyebrow">Ferramentas de gestão</span><h2 id="tFer">Faça as contas do seu cardápio</h2></div>
-      <div class="tools">
-        <a class="tool" href="ferramentas.html#cmv"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><b>Ficha técnica e CMV</b><small>Quanto custa cada prato e qual preço garante a sua margem</small></a>
-        <a class="tool" href="ferramentas.html#ifood"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 7h13l-1.5 9H5z"/><path d="M16 9h3l2 4v3h-6M7 19a1.5 1.5 0 1 0 0 .1M17 19a1.5 1.5 0 1 0 0 .1"/></svg></span><b>Preço no iFood</b><small>Quanto cobrar no app para as taxas não comerem o lucro</small></a>
-      </div>
-    </section>
-
-    <section class="actions" aria-label="Ações rápidas">
-      <button class="action" id="btnDas" type="button">
-        <span class="ic"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span>
-        Emitir DAS<small>Guia do MEI no PGMEI</small>
-      </button>
-      <button class="action" id="btnIrEnviar" type="button">
-        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg></span>
-        Enviar documento<small>Notas, extratos, comprovantes</small>
-      </button>
-      <a class="action wa" id="waAction" href="#" target="_blank" rel="noopener">
-        <span class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-5A8 8 0 1 1 21 12z"/></svg></span>
-        Fale com o contador<small>Atendimento no WhatsApp</small>
-      </a>
-    </section>
-
-    <section class="card" id="secDas" hidden>
-      <span class="eyebrow">Guia do MEI</span>
-      <ol class="steps">
+        <ul class="guias" id="listaGuias"><li><p class="empty">Carregando…</p></li></ul>
+        <details class="pagas" id="gPagas" hidden><summary id="gPagasTit">Guias pagas</summary><ul class="guias" id="listaPagas"></ul></details>
+        <button class="btn" id="btnDas" type="button" hidden>Emitir o DAS no PGMEI</button>
+        <div class="card" id="secDas" hidden>
+          <span class="eyebrow">Guia do MEI</span>
+          <ol class="steps">
         <li>Toque em <b>Copiar CNPJ</b>.</li>
         <li>Toque em <b>Abrir PGMEI</b> e cole o CNPJ na tela da Receita.</li>
         <li>Escolha <b>Emitir Guia de Pagamento (DAS)</b>, marque o mês e gere a guia.</li>
@@ -411,18 +404,41 @@ input::placeholder,textarea::placeholder{color:#7A6D63}
         <a class="btn primary" href="https://www8.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgmei.app/Identificacao" target="_blank" rel="noopener">Abrir PGMEI</a>
       </div>
       <p class="quote">Meses atrasados podem sair numa guia só. Na dúvida, fale com a gente antes de pagar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Faturamento (termômetro do MEI / painel do Simples) -->
+    <section class="ac" id="secFat" hidden>
+      <button class="ac-btn" type="button" id="acFatBtn" aria-expanded="false" aria-controls="acFatBody"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span class="ac-t"><b id="tFat">Seu faturamento</b><small id="acFatSub"></small></span><span class="ac-badge" id="acFatBadge" hidden></span><svg class="ac-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="ac-body" id="acFatBody" hidden>
+        <span id="fEyebrow" hidden></span>
+        <div id="fCorpo" style="display:flex;flex-direction:column;gap:12px"></div>
+      </div>
+    </section>
+
+    <!-- Ferramentas -->
+    <section class="ac" id="acFer">
+      <button class="ac-btn" type="button" id="acFerBtn" aria-expanded="false" aria-controls="acFerBody"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><span class="ac-t"><b>Ferramentas de gestão</b><small id="acFerSub">Ficha técnica, CMV e preço no iFood</small></span><span class="ac-badge" id="acFerBadge" hidden></span><svg class="ac-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="ac-body" id="acFerBody" hidden>
+        <div class="tools">
+          <a class="tool" href="ferramentas.html#cmv"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><b>Ficha técnica e CMV</b><small>Quanto custa cada prato e qual preço garante a sua margem</small></a>
+          <a class="tool" href="ferramentas.html#ifood"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 7h13l-1.5 9H5z"/><path d="M16 9h3l2 4v3h-6M7 19a1.5 1.5 0 1 0 0 .1M17 19a1.5 1.5 0 1 0 0 .1"/></svg></span><b>Preço no iFood</b><small>Quanto cobrar no app para as taxas não comerem o lucro</small></a>
+        </div>
+      </div>
     </section>
 
     <!-- Solicitações -->
-    <section class="sec" aria-labelledby="tSol">
-      <div class="sec-head"><div><span class="eyebrow">Solicitações</span><h2 id="tSol">Seus pedidos ao escritório</h2></div>
-        <button class="btn ghost" id="btnNova" type="button">+ Nova solicitação</button></div>
-      <div class="counts" role="group" aria-label="Filtrar por status">
-        <button class="count" data-f="pendente" aria-pressed="false"><b id="nPend">0</b><span><i class="dot" style="background:var(--wait)"></i>Pendente</span></button>
-        <button class="count" data-f="andamento" aria-pressed="false"><b id="nAnd">0</b><span><i class="dot" style="background:var(--run)"></i>Em andamento</span></button>
-        <button class="count" data-f="concluido" aria-pressed="false"><b id="nConc">0</b><span><i class="dot" style="background:var(--ok)"></i>Concluído</span></button>
-      </div>
-      <form class="card" id="formSol" hidden>
+    <section class="ac" id="acSol">
+      <button class="ac-btn" type="button" id="acSolBtn" aria-expanded="false" aria-controls="acSolBody"><span class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-5A8 8 0 1 1 21 12z"/><path d="M8 11h8M8 14h5"/></svg></span><span class="ac-t"><b>Solicitações</b><small id="acSolSub">Peça guias, certidões, notas e o que precisar</small></span><span class="ac-badge" id="acSolBadge" hidden></span><svg class="ac-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="ac-body" id="acSolBody" hidden>
+        <button class="btn primary" id="btnNova" type="button">+ Nova solicitação</button>
+        <div class="counts" role="group" aria-label="Filtrar por status">
+          <button class="count" data-f="pendente" aria-pressed="false"><b id="nPend">0</b><span><i class="dot" style="background:var(--wait)"></i>Pendente</span></button>
+          <button class="count" data-f="andamento" aria-pressed="false"><b id="nAnd">0</b><span><i class="dot" style="background:var(--run)"></i>Em andamento</span></button>
+          <button class="count" data-f="concluido" aria-pressed="false"><b id="nConc">0</b><span><i class="dot" style="background:var(--ok)"></i>Concluído</span></button>
+        </div>
+        <form class="card" id="formSol" hidden>
         <label class="f" for="sAssunto">Assunto
           <select id="sAssunto" required>
             <option value="">Escolha…</option>
@@ -439,27 +455,34 @@ input::placeholder,textarea::placeholder{color:#7A6D63}
         <div class="msg" id="erroSol" hidden></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" type="submit">Enviar solicitação</button><button class="btn ghost" type="button" id="btnCancelSol">Cancelar</button></div>
       </form>
-      <ul class="reqs" id="listaSol"><li><p class="empty">Carregando…</p></li></ul>
-    </section>
-
-    <!-- Documentos -->
-    <section class="sec" aria-labelledby="tDocs">
-      <div><span class="eyebrow">Documentos</span><h2 id="tDocs">Do escritório para você</h2></div>
-      <div class="card"><ul class="files" id="listaEscritorio"><li><span class="nm">Carregando…</span></li></ul></div>
-    </section>
-
-    <section class="sec" id="secEnviar" aria-labelledby="tEnv">
-      <div><span class="eyebrow">Envio</span><h2 id="tEnv">Enviar documentos</h2></div>
-      <div class="card">
-        <div class="drop" id="drop">
-          <span>Arraste aqui ou escolha os arquivos (até 10 MB cada)</span>
-          <label class="btn primary" for="arquivos">Escolher arquivos</label>
-          <input type="file" id="arquivos" multiple hidden>
-        </div>
-        <span class="eyebrow" style="font-size:11px">Já enviados</span>
-        <ul class="files" id="listaEnviados"></ul>
+        <ul class="reqs" id="listaSol"><li><p class="empty">Carregando…</p></li></ul>
       </div>
     </section>
+
+    <!-- Documentos do escritório -->
+    <section class="ac" id="acDocs">
+      <button class="ac-btn" type="button" id="acDocsBtn" aria-expanded="false" aria-controls="acDocsBody"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 4v12M6 10l6 6 6-6M4 20h16"/></svg></span><span class="ac-t"><b>Documentos do escritório</b><small id="acDocsSub">Guias, holerites e declarações</small></span><span class="ac-badge" id="acDocsBadge" hidden></span><svg class="ac-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="ac-body" id="acDocsBody" hidden>
+        <div class="card"><ul class="files" id="listaEscritorio"><li><span class="nm">Carregando…</span></li></ul></div>
+      </div>
+    </section>
+
+    <!-- Enviar documentos -->
+    <section class="ac" id="secEnviar">
+      <button class="ac-btn" type="button" id="acEnvBtn" aria-expanded="false" aria-controls="acEnvBody"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg></span><span class="ac-t"><b>Enviar documentos</b><small id="acEnvSub">Notas, extratos e comprovantes</small></span><span class="ac-badge" id="acEnvBadge" hidden></span><svg class="ac-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="ac-body" id="acEnvBody" hidden>
+        <div class="card">
+          <div class="drop" id="drop">
+            <span>Arraste aqui ou escolha os arquivos (até 10 MB cada)</span>
+            <label class="btn primary" for="arquivos">Escolher arquivos</label>
+            <input type="file" id="arquivos" multiple hidden>
+          </div>
+          <span class="eyebrow" style="font-size:11px">Já enviados</span>
+          <ul class="files" id="listaEnviados"></ul>
+        </div>
+      </div>
+    </section>
+    </nav>
   </div>
 </main>
 
@@ -496,7 +519,7 @@ function linkWhats(){
   const quem = sessao ? ('Sou ' + sessao.nome + ' (CNPJ ' + sessao.cnpj + '). ') : '';
   return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent('Olá! ' + quem + 'Vim pelo app da Menu Contabilidade.');
 }
-function atualizaWhats(){ ['waTop','waAction','waFab'].forEach(id => $(id).href = linkWhats()); }
+function atualizaWhats(){ ['waTop','waAction','waFab'].forEach(id => { if($(id)) $(id).href = linkWhats(); }); }
 atualizaWhats();
 
 /* Máscara de CNPJ */
@@ -537,10 +560,11 @@ function montarVencimentos(tipo, lista){
   else v=v.map(x=>({...x, obs:x.obs+' · '+(x.t.length===3?'todos':x.t.join('/'))}));
   v.sort((a,b)=>a.data-b.data);
   }
-  if(!v.length){ $('proximo').innerHTML='<p class="empty">Nenhum vencimento cadastrado para a sua empresa.</p>'; $('listaVenc').innerHTML=''; return; }
+  if(!v.length){ $('proximo').innerHTML='<p class="empty">Nenhum vencimento cadastrado para a sua empresa.</p>'; $('listaVenc').innerHTML=''; resumo('Venc','Nenhum vencimento cadastrado'); return; }
   const dias=d=>Math.round((d-hoje)/864e5);
   const falta=n=>n===0?'Vence hoje':n===1?'Vence amanhã':'Faltam '+n+' dias';
   const p=v[0];
+  { const n=dias(p.data); resumo('Venc','Próximo: '+p.nome+' · '+String(p.data.getDate()).padStart(2,'0')+'/'+String(p.data.getMonth()+1).padStart(2,'0'), n===0?'hoje':n===1?'amanhã':'em '+n+' dias', n<=7?'hot':''); }
   $('proximo').innerHTML='<div class="bigdate"><b>'+String(p.data.getDate()).padStart(2,'0')+'</b><span>'+MESES[p.data.getMonth()]+'</span></div>'+
     '<div><span class="faltam">'+falta(dias(p.data)).toUpperCase()+'</span><h3>'+p.nome+'</h3><p>'+p.obs+'</p></div>';
   $('listaVenc').innerHTML=v.slice(1).map(x=>{
@@ -579,6 +603,21 @@ $('formCadastrar').addEventListener('submit', async e=>{
   finally{ b.disabled=false; b.textContent='Criar meu acesso'; }
 });
 
+/* Botões que expandem: um aberto por vez */
+function abrirSecao(k, abrir){
+  const b=$('ac'+k+'Btn'), body=$('ac'+k+'Body'); if(!b||!body) return;
+  if(abrir===undefined) abrir=b.getAttribute('aria-expanded')!=='true';
+  if(abrir) document.querySelectorAll('.ac-btn[aria-expanded="true"]').forEach(o=>{ if(o!==b){ o.setAttribute('aria-expanded','false'); $(o.getAttribute('aria-controls')).hidden=true; } });
+  b.setAttribute('aria-expanded',String(abrir)); body.hidden=!abrir;
+  if(abrir){ const r=b.getBoundingClientRect(); if(r.top<70||r.top>innerHeight*.45) b.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}); }
+}
+document.querySelectorAll('.ac-btn').forEach(b=>b.addEventListener('click',()=>abrirSecao(b.id.slice(2,-3))));
+function resumo(k, texto, selo, classe){
+  const s=$('ac'+k+'Sub'); if(s && texto!==null && texto!==undefined) s.textContent=texto;
+  const g=$('ac'+k+'Badge'); if(!g) return;
+  g.hidden=!selo; g.textContent=selo||''; g.className='ac-badge'+(classe?' '+classe:'');
+}
+
 /* Painel */
 function abrirPainel(s){
   sessao=s;
@@ -590,8 +629,7 @@ function abrirPainel(s){
   carregarDocs(); carregarSolicitacoes(); carregarGuias(); carregarFaturamento(); carregarMes(); mostrarInstalar();
 }
 $('btnSair').onclick=async()=>{ try{ await chamar('sair',sessao.token);}catch(e){} try{ sessionStorage.removeItem('rb_sessao'); }catch(e){} location.reload(); };
-$('btnDas').onclick=()=>{ const s=$('secDas'); s.hidden=!s.hidden; if(!s.hidden) s.scrollIntoView({block:'nearest'}); };
-$('btnIrEnviar').onclick=()=>$('secEnviar').scrollIntoView({block:'start'});
+$('btnDas').onclick=()=>{ const s=$('secDas'); s.hidden=!s.hidden; $('btnDas').textContent=s.hidden?'Emitir o DAS no PGMEI':'Fechar passo a passo'; if(!s.hidden) s.scrollIntoView({block:'nearest'}); };
 $('btnCopiar').onclick=()=>{
   const num=sessao.cnpj.replace(/\D/g,'');
   navigator.clipboard.writeText(num).then(()=>toast('CNPJ copiado')).catch(()=>toast('CNPJ: '+num));
@@ -613,6 +651,7 @@ function renderSol(){
   const c={pendente:0,andamento:0,concluido:0};
   solicitacoes.forEach(s=>c[chaveStatus(s.status)]++);
   $('nPend').textContent=c.pendente; $('nAnd').textContent=c.andamento; $('nConc').textContent=c.concluido;
+  { const abertas=c.pendente+c.andamento; resumo('Sol', solicitacoes.length?[c.pendente&&c.pendente+' pendente'+(c.pendente>1?'s':''),c.andamento&&c.andamento+' em andamento',c.concluido&&c.concluido+' concluída'+(c.concluido>1?'s':'')].filter(Boolean).join(' · '):'Peça guias, certidões, notas e o que precisar', abertas?String(abertas)+' aberta'+(abertas>1?'s':''):'', abertas?'hot':''); }
   document.querySelectorAll('.count').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.f===filtro)));
   const lista=solicitacoes.filter(s=>!filtro||chaveStatus(s.status)===filtro);
   const ul=$('listaSol'); ul.innerHTML='';
@@ -719,6 +758,7 @@ function renderGuias(){
   const tot=abertas.reduce((s,g)=>s+g.valor,0);
   $('gTotal').hidden=!abertas.length;
   $('gTotal').innerHTML='<small>Total em aberto</small>'+fmtMoeda(tot);
+  resumo('Guias', abertas.length?'Total em aberto: '+fmtMoeda(tot):(guias.length?'Tudo em dia':'Nenhuma guia publicada ainda'), abertas.length?abertas.length+(abertas.length>1?' em aberto':' em aberto'):'', abertas.length?'hot':'');
   $('gPagas').hidden=!pagas.length;
   $('gPagasTit').textContent='Guias pagas ('+pagas.length+')';
   const up=$('listaPagas'); up.innerHTML=''; pagas.slice(0,12).forEach(g=>up.append(itemGuia(g)));
@@ -738,11 +778,12 @@ function renderFat(){
   const f=fiscal, sec=$('secFat'), c=$('fCorpo');
   if(!f||(!f.mei&&!f.simples)){ sec.hidden=true; return; }
   sec.hidden=false; c.innerHTML='';
-  if(f.mei) renderMei(f,c); else renderSimples(f,c);
+  if(f.mei){ renderMei(f,c); const p=f.mei.pct; resumo('Fat','Faturado em '+f.mei.ano+': '+fmtMoeda(f.mei.acumulado), Math.round(p)+'% do limite', p>=70?'hot':'ok'); }
+  else { renderSimples(f,c); const s=f.simples; resumo('Fat', s.mesesComDado?'Faturamento 12 meses: '+fmtMoeda(s.rbt12):'Aguardando lançamentos do escritório', s.mesesComDado&&s.aliquota!==null?'alíquota '+pctF(s.aliquota,2):''); }
 }
 function renderMei(f,c){
   const m=f.mei, pct=m.pct, n=pct>=100?'over':pct>=90?'hot':pct>=70?'warn':'ok';
-  $('fEyebrow').textContent='Limite do MEI'; $('tFat').textContent='Termômetro do faturamento '+m.ano;
+  $('fEyebrow').textContent='Limite do MEI'; $('tFat').textContent='Termômetro do MEI';
   const card=document.createElement('div'); card.className='card thermo'; card.dataset.n=n;
   const w=Math.min(100,pct);
   let msg;
@@ -799,7 +840,7 @@ function renderMei(f,c){
 }
 function renderSimples(f,c){
   const s=f.simples;
-  $('fEyebrow').textContent='Simples Nacional'; $('tFat').textContent='Seu painel do Simples';
+  $('fEyebrow').textContent='Simples Nacional'; $('tFat').textContent='Painel do Simples';
   if(!s.mesesComDado){
     c.innerHTML='<div class="card"><p class="empty" style="font-size:14px">O escritório ainda vai lançar o seu faturamento aqui. Assim que os números entrarem, você acompanha o faturamento dos últimos 12 meses, a alíquota efetiva e o fator R.</p></div>';
     return;
@@ -854,13 +895,14 @@ function renderCk(){
   if(!ck||!ck.total){ sec.hidden=true; return; }
   sec.hidden=false;
   $('tCk').textContent='Documentos de '+ck.rotulo.split(' de ')[0];
+  resumo('Ck',null,ck.feitos+' de '+ck.total,ck.completo?'ok':'hot');
   const [a,m,d]=ck.prazo.split('-'); const limite=new Date(+a,+m-1,+d); const hoje=new Date(); hoje.setHours(0,0,0,0);
   const atrasado=!ck.completo&&hoje>limite;
   const pz=$('ckPrazo'); pz.className='ck-prazo'+(atrasado?' late':'');
   pz.innerHTML=ck.completo?'<b>Tudo enviado</b>':(atrasado?'Prazo era <b>':'Envie até <b>')+d+'/'+m+'</b>';
   const card=$('ckCard'); card.innerHTML='';
   const top=document.createElement('div'); top.style.cssText='display:flex;justify-content:space-between;gap:10px;font-size:13.5px;color:var(--muted)';
-  top.innerHTML='<span>Para fecharmos a contabilidade de '+ck.rotulo+'</span><b style="color:var(--white)">'+ck.feitos+' de '+ck.total+'</b>';
+  top.innerHTML='<span>Para fecharmos a contabilidade de '+ck.rotulo+'</span><b style="color:var(--white);white-space:nowrap">'+ck.feitos+' de '+ck.total+'</b>';
   const bar=document.createElement('div'); bar.className='ck-bar'; bar.setAttribute('role','progressbar'); bar.setAttribute('aria-valuemin','0');
   bar.setAttribute('aria-valuemax',String(ck.total)); bar.setAttribute('aria-valuenow',String(ck.feitos)); bar.setAttribute('aria-label','Documentos enviados');
   bar.innerHTML='<i style="width:'+(ck.feitos/ck.total*100)+'%"></i>';
@@ -941,6 +983,8 @@ async function carregarDocs(){
     const r=await chamar('listarDocumentos',sessao.token);
     renderLista($('listaEscritorio'),r.doEscritorio,'Nenhum documento ainda. Guias, holerites e declarações enviados pelo escritório aparecem aqui.');
     renderLista($('listaEnviados'),r.enviados,'Você ainda não enviou documentos.');
+    const n=r.doEscritorio.length; resumo('Docs', n?'Último em '+fmtData(r.doEscritorio.map(a=>a.data).sort().pop()):'Guias, holerites e declarações', n?n+' arquivo'+(n>1?'s':''):'');
+    if(r.enviados.length) resumo('Env','Você já enviou '+r.enviados.length+' arquivo'+(r.enviados.length>1?'s':''));
   }catch(x){ tratarSessao(x); }
 }
 async function baixar(id,btn,rotulo){

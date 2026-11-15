@@ -1,6 +1,6 @@
 // Menu Contabilidade: deixa o app instalável e abre mesmo com internet fraca.
 // Sempre busca a versão mais nova na rede; a cópia guardada só é usada se estiver sem conexão.
-const CACHE = 'mc-app-v1';
+const CACHE = 'mc-app-v2';
 const BASE = ['./', 'index.html', 'ferramentas.html', 'favicon.svg', 'icon-192.png', 'icon-512.png', 'manifest.webmanifest'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(BASE)).then(() => self.skipWaiting()));
