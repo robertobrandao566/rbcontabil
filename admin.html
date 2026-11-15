@@ -106,6 +106,21 @@ textarea{min-height:70px;resize:vertical}
 .back{background:none;border:0;color:var(--peach);font:600 13.5px var(--f);cursor:pointer;padding:0;align-self:flex-start}
 .resp{display:grid;grid-template-columns:160px 1fr auto;gap:8px;align-items:start}
 
+.fat-wrap{overflow-x:auto;margin:0 -4px;padding:0 4px}
+table.fat{border-collapse:collapse;width:100%;min-width:460px;font-size:13.5px}
+table.fat th{text-align:left;font:700 11px var(--f);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
+table.fat td{padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.fat td:first-child{white-space:nowrap;color:var(--white);font-weight:600}
+table.fat input{padding:7px 9px;font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
+table.fat input.mudou{border-color:var(--orange)}
+.mini-bar{height:10px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden}
+.mini-bar i{display:block;height:100%;background:var(--ok)}
+.mini-bar.warn i{background:var(--orange)}
+.mini-bar.hot i{background:var(--err)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kv div{background:var(--panel-2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.kv small{font-size:11.5px;color:var(--muted)}
+.kv b{font-size:17px;color:var(--white);font-variant-numeric:tabular-nums}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--cream);color:#1D1B19;padding:10px 16px;border-radius:999px;font:600 13px var(--f);max-width:90vw;text-align:center;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.35)}
 @media (max-width:860px){.cols{grid-template-columns:1fr}.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:520px){.grid2{grid-template-columns:1fr}.resp{grid-template-columns:1fr}.who span{display:none}}
@@ -158,6 +173,10 @@ textarea{min-height:70px;resize:vertical}
           <ul class="list" id="rGuias"></ul>
         </div>
       </div>
+      <div class="card">
+        <div class="li-top"><h3>MEIs perto do limite</h3><span class="meta">70% ou mais do limite do ano</span></div>
+        <ul class="list" id="rMei"></ul>
+      </div>
     </section>
 
     <!-- Clientes -->
@@ -207,6 +226,21 @@ textarea{min-height:70px;resize:vertical}
           <div class="msg" id="erroDoc" hidden></div>
           <button class="btn primary" type="submit">Enviar e avisar o cliente</button>
         </form>
+      </div>
+
+      <div class="card" id="cFat">
+        <div class="li-top"><h3>Faturamento e enquadramento</h3><span class="meta" id="fOrigemInfo"></span></div>
+        <div class="grid4" style="align-items:end">
+          <label class="f" for="fRegime">Regime<select id="fRegime"><option>MEI</option><option>Simples Nacional</option><option>Outro</option></select></label>
+          <label class="f" for="fAnexo">Anexo do Simples<select id="fAnexo"><option value="">—</option><option>I</option><option>II</option><option>III</option><option>IV</option><option>V</option><option>III ou V (fator R)</option></select></label>
+          <label class="f" for="fInicio">Início da atividade<input id="fInicio" type="month" aria-describedby="fInicioAj"></label>
+          <button class="btn" id="btnFiscal" type="button">Salvar enquadramento</button>
+        </div>
+        <p class="fine" id="fInicioAj">Preencha o início só se a empresa abriu há menos de 12 meses: muda o limite do MEI (proporcional) e o RBT12 do Simples.</p>
+        <div id="fInd"></div>
+        <div class="fat-wrap"><table class="fat"><thead><tr><th>Mês</th><th>Receita bruta (R$)</th><th class="colFolha">Folha (R$)</th><th>Lançado por</th></tr></thead><tbody id="fTab"></tbody></table></div>
+        <div class="row" style="justify-content:space-between"><span class="fine">Só os meses alterados são salvos. Folha para o fator R = salários + pró-labore + FGTS + INSS patronal.</span>
+          <button class="btn primary" id="btnSalvarFat" type="button">Salvar faturamento</button></div>
       </div>
 
       <div class="card"><h3>Guias</h3><ul class="list" id="dGuias"></ul></div>
@@ -329,6 +363,16 @@ async function carregarResumo(){
       const b=el('button','btn sm','Abrir cliente'); b.type='button'; b.onclick=()=>abrirCliente(g.cnpj); li.append(b);
       ug.append(li);
     });
+    const um=$('rMei'); um.innerHTML='';
+    if(!(r.meisAtencao||[]).length) um.innerHTML='<li><p class="empty">Nenhum MEI acima de 70% do limite.</p></li>';
+    (r.meisAtencao||[]).forEach(m=>{
+      const li=el('li'); const top=el('div','li-top');
+      const t=el('div'); t.append(el('strong','',m.nome),el('div','meta',m.cnpj+' · '+brl(m.acumulado)+' de '+brl(m.limite)));
+      top.append(t,el('span','chip '+(m.pct>=90?'vencida':'pendente'),Math.round(m.pct)+'%'));
+      const bar=el('div','mini-bar '+(m.pct>=90?'hot':'warn')); const i=el('i'); i.style.width=Math.min(100,m.pct)+'%'; bar.append(i);
+      const b=el('button','btn sm','Abrir cliente'); b.type='button'; b.onclick=()=>abrirCliente(m.cnpj);
+      li.append(top,bar,b); um.append(li);
+    });
   }catch(x){ $('stats').innerHTML=''; toast(x.message); }
 }
 
@@ -404,12 +448,76 @@ function renderDetalhe(d){
       const b=el('button','btn sm','Baixar'); b.type='button'; b.onclick=()=>baixar(f.id,b); top.append(t,b); li.append(top); ul.append(li); }); };
   lista($('dEnv'),d.enviados,'O cliente ainda não enviou documentos.');
   lista($('dEsc'),d.doEscritorio,'Nada enviado pelo escritório ainda.');
+  renderFiscal(d.fiscal);
 }
 $('dStatus').addEventListener('change',async e=>{
   try{ await chamar('adminStatusCliente',sess.token,atual.cliente.cnpj,e.target.value);
     toast(e.target.value==='redefinir'?'No próximo acesso, a senha digitada pelo cliente vira a nova senha':'Acesso atualizado: '+e.target.value); }
   catch(x){ toast(x.message); e.target.value=atual.cliente.status; }
 });
+
+
+/* Faturamento e enquadramento */
+const MESES_AB=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const compRot=c=>MESES_AB[Number(c.slice(5,7))-1]+'/'+c.slice(0,4);
+const num2=v=>v===null||v===undefined?'':Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct=(v,c=1)=>(v*100).toLocaleString('pt-BR',{minimumFractionDigits:c,maximumFractionDigits:c})+'%';
+function renderFiscal(f){
+  if(!f){ $('cFat').hidden=true; return; }
+  $('cFat').hidden=false;
+  $('fRegime').value=f.regime; $('fAnexo').value=f.anexo||''; $('fInicio').value=f.inicio||'';
+  $('fAnexo').disabled=f.regime!=='Simples Nacional';
+  const simples=f.regime==='Simples Nacional';
+  document.querySelectorAll('.colFolha').forEach(x=>x.hidden=!simples);
+  $('fOrigemInfo').textContent=f.regime==='MEI'?'O cliente MEI também informa pelo app; o que o escritório lançar vale por cima.':simples?'Só o escritório lança. O cliente vê o painel do Simples no app.':'Regime sem painel no app.';
+  const ind=$('fInd'); ind.innerHTML='';
+  if(f.mei){
+    const m=f.mei; const k=el('div','kv');
+    [['Faturado em '+m.ano,brl(m.acumulado)],['Limite'+(m.proporcional?' (proporcional)':''),brl(m.limite)],['Uso do limite',Math.round(m.pct)+'%'],['Projeção do ano',m.projecao?brl(m.projecao):'—']]
+      .forEach(([a,b])=>{ const d=el('div'); d.append(el('small','',a),el('b','',b)); k.append(d); });
+    const bar=el('div','mini-bar '+(m.pct>=90?'hot':m.pct>=70?'warn':'')); const i=el('i'); i.style.width=Math.min(100,m.pct)+'%'; bar.append(i);
+    ind.append(k,bar);
+    if(m.mesesPendentes.length) ind.append(el('p','fine','Meses sem lançamento: '+m.mesesPendentes.map(compRot).join(', ')+'.'));
+  } else if(f.simples){
+    const s=f.simples; const k=el('div','kv');
+    [['RBT12 (DAS de '+compRot(f.compAtual)+')',brl(s.rbt12)+(s.proporcionalizado?' *':'')],['Anexo usado',s.anexoUsado||'defina o anexo'],
+     ['Alíquota efetiva',s.aliquota!==null?pct(s.aliquota,2):'—'],['Fator R',s.fatorR!==null?pct(s.fatorR):'—']]
+      .forEach(([a,b])=>{ const d=el('div'); d.append(el('small','',a),el('b','',b)); k.append(d); });
+    ind.append(k);
+    if(s.fatorRDica&&s.fatorR<.28) ind.append(el('div','info','Fator R abaixo de 28%: faltam '+brl(s.fatorRDica.folhaQueFalta)+' de folha em 12 meses para o Anexo III (economia estimada de '+brl(s.fatorRDica.economiaMensal)+'/mês).'));
+    if(s.mesesComDado<s.mesesNecessarios) ind.append(el('p','fine',s.mesesComDado+' de '+s.mesesNecessarios+' meses do RBT12 lançados.'+(s.proporcionalizado?' * proporcionalizado (empresa com menos de 12 meses).':'')));
+  }
+  const tb=$('fTab'); tb.innerHTML='';
+  f.meses.slice().reverse().forEach(x=>{
+    const tr=el('tr'); tr.dataset.comp=x.comp;
+    const td0=el('td','',compRot(x.comp)+(x.comp===f.compAtual?' (em curso)':''));
+    const mk=(campo,val,rot)=>{ const td=el('td'); const i=el('input'); i.inputMode='decimal'; i.value=num2(val); i.dataset.orig=i.value; i.dataset.campo=campo;
+      i.setAttribute('aria-label',rot+' de '+compRot(x.comp)); i.addEventListener('input',()=>i.classList.toggle('mudou',i.value!==i.dataset.orig)); td.append(i); return td; };
+    const tdF=mk('folha',x.folha,'Folha'); tdF.className='colFolha'; tdF.hidden=!simples;
+    tr.append(td0,mk('receita',x.receita,'Receita'),tdF,el('td','meta',x.origem||'—'));
+    tb.append(tr);
+  });
+}
+$('fRegime').addEventListener('change',()=>{ $('fAnexo').disabled=$('fRegime').value!=='Simples Nacional'; });
+$('btnFiscal').onclick=async()=>{
+  const b=$('btnFiscal'); b.disabled=true;
+  try{ renderDetalhe(await chamar('adminSalvarFiscal',sess.token,atual.cliente.cnpj,{regime:$('fRegime').value,anexo:$('fAnexo').disabled?'':$('fAnexo').value,inicio:$('fInicio').value})); toast('Enquadramento salvo'); }
+  catch(x){ toast(x.message); } finally{ b.disabled=false; }
+};
+$('btnSalvarFat').onclick=async()=>{
+  const linhas=[];
+  document.querySelectorAll('#fTab tr').forEach(tr=>{
+    const ins=[...tr.querySelectorAll('input')].filter(i=>!i.closest('td').hidden);
+    if(!ins.some(i=>i.value!==i.dataset.orig)) return;
+    const v=c=>{ const i=ins.find(z=>z.dataset.campo===c); return i?i.value:''; };
+    linhas.push({comp:tr.dataset.comp,receita:v('receita'),folha:v('folha')});
+  });
+  if(!linhas.length){ toast('Nenhum mês alterado'); return; }
+  if(linhas.some(l=>l.receita.trim()==='')){ toast('Preencha a receita dos meses alterados (pode ser 0)'); return; }
+  const b=$('btnSalvarFat'); b.disabled=true; b.textContent='Salvando…';
+  try{ renderDetalhe(await chamar('adminSalvarFaturamento',sess.token,atual.cliente.cnpj,linhas)); toast(linhas.length+(linhas.length>1?' meses salvos':' mês salvo')); }
+  catch(x){ toast(x.message); } finally{ b.disabled=false; b.textContent='Salvar faturamento'; }
+};
 
 /* Publicar guia */
 TIPOS.forEach(t=>{ const o=el('option','',t); o.value=t; $('gTipo').append(o); });

@@ -104,6 +104,51 @@ a{color:var(--peach)}
 details.pagas summary{cursor:pointer;color:var(--muted);font-size:13.5px;padding:4px 0}
 details.pagas[open] summary{margin-bottom:10px}
 
+/* Faturamento */
+.thermo{gap:12px}
+.th-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.th-top small{display:block;font:600 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.th-top b{font:800 26px var(--f-head);color:var(--white);font-variant-numeric:tabular-nums}
+.th-pct{text-align:right;font:800 30px var(--f-head);color:var(--ok);font-variant-numeric:tabular-nums;line-height:1}
+.thermo[data-n="warn"] .th-pct{color:var(--orange)}
+.thermo[data-n="hot"] .th-pct,.thermo[data-n="over"] .th-pct{color:var(--err)}
+.bar{position:relative;height:16px;border-radius:999px;background:var(--navy-deep);border:1px solid var(--line);overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:999px;background:var(--ok);transition:width .6s ease}
+.thermo[data-n="warn"] .bar i{background:var(--orange)}
+.thermo[data-n="hot"] .bar i,.thermo[data-n="over"] .bar i{background:var(--err)}
+.bar .mk{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,248,240,.55)}
+.bar-leg{position:relative;height:16px;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar-leg span{position:absolute;top:0;white-space:nowrap}
+.th-msg{margin:0;font-weight:600;color:var(--white)}
+.th-sub{margin:0;font-size:13.5px;color:var(--muted)}
+.pend{font-size:13.5px;padding:10px 12px;border-radius:10px;background:rgba(228,87,46,.1);color:var(--peach);border:1px solid rgba(228,87,46,.35)}
+.months{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.months li{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 11px;display:flex;flex-direction:column;gap:2px}
+.months b{font:700 12px var(--f-head);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.months span{font-weight:700;color:var(--white);font-variant-numeric:tabular-nums}
+.months small{font-size:11.5px;color:var(--muted)}
+.months li.falta span{color:var(--peach);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 14px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.kpi small{font:600 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kpi b{font:800 21px var(--f-head);color:var(--white);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.kpi span{font-size:12px;color:var(--muted)}
+.chart{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;align-items:end;height:120px}
+.chart div{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:4px;min-width:0}
+.chart i{display:block;width:100%;max-width:26px;border-radius:5px 5px 2px 2px;background:var(--orange);min-height:2px}
+.chart i.vazio{background:var(--line)}
+.chart small{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.dica{border-left:4px solid var(--ok)}
+.dica.v{border-left-color:var(--orange)}
+.dica p{margin:0;font-size:14px}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tool{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;color:var(--white);text-decoration:none;font-size:14px}
+.tool:hover{border-color:var(--orange)}
+.tool b{font-size:15px}
+.tool .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(228,87,46,.15);color:var(--orange)}
+.tool small{color:var(--muted);font-size:12.5px}
+@media (max-width:480px){.kpis{grid-template-columns:1fr 1fr}.kpis .kpi:first-child{grid-column:1/-1}.tools{grid-template-columns:1fr}.th-top b{font-size:22px}}
+
 /* Botões */
 .btn{font:600 15px var(--f-body);padding:13px 18px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--white);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .btn.primary{background:var(--orange);border-color:var(--orange);color:#1D1B19}
@@ -259,6 +304,21 @@ input::placeholder,textarea::placeholder{color:#7A6D63}
       </div>
       <ul class="guias" id="listaGuias"><li><p class="empty">Carregando…</p></li></ul>
       <details class="pagas" id="gPagas" hidden><summary id="gPagasTit">Guias pagas</summary><ul class="guias" id="listaPagas"></ul></details>
+    </section>
+
+    <!-- Faturamento (termômetro do MEI / painel do Simples) -->
+    <section class="sec" id="secFat" aria-labelledby="tFat" hidden>
+      <div><span class="eyebrow" id="fEyebrow">Faturamento</span><h2 id="tFat">Seu faturamento</h2></div>
+      <div id="fCorpo" style="display:flex;flex-direction:column;gap:12px"></div>
+    </section>
+
+    <!-- Ferramentas -->
+    <section class="sec" aria-labelledby="tFer">
+      <div><span class="eyebrow">Ferramentas de gestão</span><h2 id="tFer">Faça as contas do seu cardápio</h2></div>
+      <div class="tools">
+        <a class="tool" href="ferramentas.html#cmv"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><b>Ficha técnica e CMV</b><small>Quanto custa cada prato e qual preço garante a sua margem</small></a>
+        <a class="tool" href="ferramentas.html#ifood"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 7h13l-1.5 9H5z"/><path d="M16 9h3l2 4v3h-6M7 19a1.5 1.5 0 1 0 0 .1M17 19a1.5 1.5 0 1 0 0 .1"/></svg></span><b>Preço no iFood</b><small>Quanto cobrar no app para as taxas não comerem o lucro</small></a>
+      </div>
     </section>
 
     <section class="actions" aria-label="Ações rápidas">
@@ -453,7 +513,7 @@ function abrirPainel(s){
   $('pNome').textContent='Olá, '+s.nome; $('pCnpj').textContent='CNPJ '+s.cnpj; $('pTipo').textContent=s.tipo;
   $('btnDas').hidden = s.tipo!=='MEI';
   montarVencimentos(s.tipo); atualizaWhats();
-  carregarDocs(); carregarSolicitacoes(); carregarGuias();
+  carregarDocs(); carregarSolicitacoes(); carregarGuias(); carregarFaturamento();
 }
 $('btnSair').onclick=async()=>{ try{ await chamar('sair',sessao.token);}catch(e){} try{ sessionStorage.removeItem('rb_sessao'); }catch(e){} location.reload(); };
 $('btnDas').onclick=()=>{ const s=$('secDas'); s.hidden=!s.hidden; if(!s.hidden) s.scrollIntoView({block:'nearest'}); };
@@ -588,6 +648,123 @@ function renderGuias(){
   $('gPagas').hidden=!pagas.length;
   $('gPagasTit').textContent='Guias pagas ('+pagas.length+')';
   const up=$('listaPagas'); up.innerHTML=''; pagas.slice(0,12).forEach(g=>up.append(itemGuia(g)));
+}
+
+/* Faturamento */
+let fiscal=null;
+const MES_NOME=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const compRot=c=>MESES[Number(c.slice(5,7))-1]+'/'+c.slice(2,4);
+const compLongo=c=>MES_NOME[Number(c.slice(5,7))-1]+' de '+c.slice(0,4);
+const pctF=(v,c=1)=>(v*100).toLocaleString('pt-BR',{minimumFractionDigits:c,maximumFractionDigits:c})+'%';
+async function carregarFaturamento(){
+  try{ fiscal=await chamar('meuFaturamento',sessao.token); renderFat(); }
+  catch(x){ tratarSessao(x); }
+}
+function renderFat(){
+  const f=fiscal, sec=$('secFat'), c=$('fCorpo');
+  if(!f||(!f.mei&&!f.simples)){ sec.hidden=true; return; }
+  sec.hidden=false; c.innerHTML='';
+  if(f.mei) renderMei(f,c); else renderSimples(f,c);
+}
+function renderMei(f,c){
+  const m=f.mei, pct=m.pct, n=pct>=100?'over':pct>=90?'hot':pct>=70?'warn':'ok';
+  $('fEyebrow').textContent='Limite do MEI'; $('tFat').textContent='Termômetro do faturamento '+m.ano;
+  const card=document.createElement('div'); card.className='card thermo'; card.dataset.n=n;
+  const w=Math.min(100,pct);
+  let msg;
+  if(pct>=100) msg='Você passou do limite do MEI. Fale com o escritório o quanto antes.';
+  else if(pct>=90) msg='Muito perto do limite: ainda cabem '+fmtMoeda(m.disponivel)+'. Vamos conversar sobre a mudança para ME?';
+  else if(pct>=70) msg='Atenção: ainda cabem '+fmtMoeda(m.disponivel)+' este ano.';
+  else msg='Tudo tranquilo: ainda cabem '+fmtMoeda(m.disponivel)+' este ano.';
+  card.innerHTML='<div class="th-top"><div><small>Faturado em '+m.ano+'</small><b>'+fmtMoeda(m.acumulado)+'</b></div>'+
+    '<div class="th-pct">'+Math.round(pct)+'%<small style="display:block;font:600 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px">do limite</small></div></div>'+
+    '<div class="bar" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'" aria-label="Faturamento do ano em relação ao limite do MEI"><i style="width:'+w+'%"></i><span class="mk" style="left:70%"></span><span class="mk" style="left:90%"></span></div>'+
+    '<div class="bar-leg"><span style="left:0">R$ 0</span><span style="right:0">limite '+fmtMoeda(m.limite).replace(',00','')+'</span></div>'+
+    '<p class="th-sub" style="margin-top:-6px">As marcas na barra mostram 70% e 90% do limite, quando avisamos você por e-mail.</p>'+
+    '<p class="th-msg">'+msg+'</p>';
+  const sub=[];
+  if(m.proporcional) sub.push('Como a empresa abriu em '+compLongo(f.inicio)+', o limite deste ano é proporcional: R$ 6.750 por mês de atividade.');
+  if(m.projecao) sub.push('No ritmo atual, você fecha '+m.ano+' em cerca de '+fmtMoeda(m.projecao)+' ('+Math.round(m.pctProjecao)+'% do limite).');
+  if(pct>=100) sub.push('Se passar até 20% do limite, você vira ME a partir de janeiro. Acima de 20%, a mudança volta para janeiro deste ano.');
+  sub.forEach(t=>{ const p=document.createElement('p'); p.className='th-sub'; p.textContent=t; card.append(p); });
+  if(m.mesesPendentes.length){ const d=document.createElement('div'); d.className='pend'; d.textContent='Falta informar: '+m.mesesPendentes.map(compRot).join(', ')+'. Sem esses meses o termômetro fica abaixo do real.'; card.append(d); }
+  c.append(card);
+  // formulário
+  const form=document.createElement('form'); form.className='card'; form.id='formFat';
+  const travados={}; f.meses.forEach(x=>{ if(x.origem==='Escritório') travados[x.comp]=true; });
+  const opcoes=f.meses.filter(x=>x.comp.slice(0,4)>=String(m.ano-1)).slice().reverse();
+  const sugerido=(m.mesesPendentes[0])||opcoes.find(x=>x.receita===null&&!travados[x.comp])?.comp||opcoes[0].comp;
+  form.innerHTML='<h3 style="font-size:17px">Informar faturamento do mês</h3>'+
+    '<div class="two"><label class="f" for="fMes">Mês<select id="fMes"></select></label>'+
+    '<label class="f" for="fValor">Quanto entrou no mês (R$)<input id="fValor" inputmode="decimal" placeholder="0,00" required></label></div>'+
+    '<p class="fine">Some tudo o que vendeu no mês: balcão, Pix, cartão e apps de delivery (o valor bruto, antes das taxas).</p>'+
+    '<div class="msg" id="erroFat" hidden></div><button class="btn primary" type="submit">Salvar</button>';
+  const sel=form.querySelector('#fMes');
+  opcoes.forEach(x=>{ const o=document.createElement('option'); o.value=x.comp;
+    o.textContent=compLongo(x.comp)+(travados[x.comp]?' · conferido pelo escritório':x.receita!==null?' · '+fmtMoeda(x.receita):'');
+    o.disabled=!!travados[x.comp]; sel.append(o); });
+  sel.value=sugerido;
+  const preencher=()=>{ const x=f.meses.find(y=>y.comp===sel.value); form.querySelector('#fValor').value=x&&x.receita!==null?x.receita.toLocaleString('pt-BR',{minimumFractionDigits:2}):''; };
+  sel.onchange=preencher; preencher();
+  form.addEventListener('submit',async e=>{
+    e.preventDefault(); erro('erroFat','');
+    const b=e.submitter; b.disabled=true; b.textContent='Salvando…';
+    try{ fiscal=await chamar('informarFaturamento',sessao.token,sel.value,form.querySelector('#fValor').value); renderFat(); toast('Faturamento de '+compLongo(sel.value)+' salvo'); }
+    catch(x){ if(/sessão expirou/i.test(x.message)) tratarSessao(x); else erro('erroFat',x.message); b.disabled=false; b.textContent='Salvar'; }
+  });
+  c.append(form);
+  // mês a mês
+  const det=document.createElement('details'); det.className='pagas';
+  const doAno=f.meses.filter(x=>x.comp.slice(0,4)===String(m.ano));
+  det.innerHTML='<summary>Mês a mês em '+m.ano+'</summary>';
+  const ul=document.createElement('ul'); ul.className='months';
+  doAno.forEach(x=>{ const li=document.createElement('li'); if(x.receita===null) li.className='falta';
+    li.innerHTML='<b>'+MESES[Number(x.comp.slice(5,7))-1]+'</b><span>'+(x.receita===null?(x.comp===f.compAtual?'mês em curso':'não informado'):fmtMoeda(x.receita))+'</span><small>'+(x.origem==='Escritório'?'conferido pelo escritório':x.origem==='Cliente'?'informado por você':'')+'</small>';
+    ul.append(li); });
+  det.append(ul); c.append(det);
+}
+function renderSimples(f,c){
+  const s=f.simples;
+  $('fEyebrow').textContent='Simples Nacional'; $('tFat').textContent='Seu painel do Simples';
+  if(!s.mesesComDado){
+    c.innerHTML='<div class="card"><p class="empty" style="font-size:14px">O escritório ainda vai lançar o seu faturamento aqui. Assim que os números entrarem, você acompanha o faturamento dos últimos 12 meses, a alíquota efetiva e o fator R.</p></div>';
+    return;
+  }
+  const ref=compLongo(f.compAtual);
+  const k=document.createElement('div'); k.className='kpis';
+  const kpi=(t,v,s2)=>'<div class="kpi"><small>'+t+'</small><b>'+v+'</b><span>'+s2+'</span></div>';
+  let html=kpi('Faturamento 12 meses',fmtMoeda(s.rbt12),'base do DAS de '+ref+(s.proporcionalizado?' (proporcional)':''));
+  html+=kpi('Alíquota efetiva',s.aliquota!==null?pctF(s.aliquota,2):'—',s.anexoUsado?'Anexo '+s.anexoUsado+' · estimativa':'o escritório vai definir o anexo');
+  if(s.fatorR!==null&&f.anexo==='III ou V (fator R)') html+=kpi('Fator R',pctF(s.fatorR),s.fatorR>=.28?'acima de 28%: Anexo III':'abaixo de 28%: Anexo V');
+  else html+=kpi('Faturado em '+f.compAtual.slice(0,4),fmtMoeda(s.receitaAno),'de janeiro até agora');
+  k.innerHTML=html; c.append(k);
+  // gráfico
+  const card=document.createElement('div'); card.className='card';
+  const ult=f.meses.slice(0,12);
+  const max=Math.max(1,...ult.map(x=>x.receita||0));
+  card.innerHTML='<h3 style="font-size:16px">Receita mês a mês</h3>';
+  const ch=document.createElement('div'); ch.className='chart'; ch.setAttribute('role','img');
+  ch.setAttribute('aria-label','Receita dos últimos 12 meses: '+ult.map(x=>compRot(x.comp)+' '+(x.receita===null?'sem lançamento':fmtMoeda(x.receita))).join('; '));
+  ult.forEach(x=>{ const d=document.createElement('div'); const i=document.createElement('i');
+    if(x.receita===null){ i.className='vazio'; i.style.height='2px'; } else i.style.height=Math.max(2,x.receita/max*92)+'px';
+    i.title=compRot(x.comp)+': '+(x.receita===null?'sem lançamento':fmtMoeda(x.receita));
+    const l=document.createElement('small'); l.textContent=MESES[Number(x.comp.slice(5,7))-1];
+    d.append(i,l); ch.append(d); });
+  card.append(ch); c.append(card);
+  // fator R
+  if(s.fatorRDica){
+    const d=s.fatorRDica, ok=s.fatorR>=.28;
+    const box=document.createElement('div'); box.className='card dica'+(ok?'':' v');
+    const p1=document.createElement('p'); const p2=document.createElement('p'); p2.className='th-sub';
+    if(ok){ p1.innerHTML='<b>Seu fator R está em '+pctF(s.fatorR)+'.</b> Com a folha acima de 28% do faturamento, você paga pela tabela do Anexo III, que é a mais barata para a sua atividade.';
+      p2.textContent='Mantenha a folha (salários e pró-labore) nesse nível. Se pensar em reduzir o pró-labore, fale com a gente antes.'; }
+    else { p1.innerHTML='<b>Seu fator R está em '+pctF(s.fatorR)+'</b>, abaixo dos 28% que levam ao Anexo III. Para chegar lá, a folha dos últimos 12 meses precisaria de mais '+fmtMoeda(d.folhaQueFalta)+'.';
+      p2.textContent='No Anexo III a alíquota cairia de '+pctF(d.aliquotaV,2)+' para '+pctF(d.aliquotaIII,2)+', uma economia estimada de '+fmtMoeda(d.economiaMensal)+' por mês. Ajustar o pró-labore pode valer a pena: converse com o escritório antes de mudar.'; }
+    box.append(p1,p2); c.append(box);
+  }
+  const p=document.createElement('p'); p.className='fine';
+  p.textContent='Estimativas feitas com os números lançados pelo escritório'+(s.mesesComDado<s.mesesNecessarios?' ('+s.mesesComDado+' de '+s.mesesNecessarios+' meses lançados)':'')+'. O valor oficial do DAS sai na apuração do PGDAS-D.';
+  c.append(p);
 }
 
 /* Documentos */

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1D1B19">
+<title>Ferramentas de Gestão · Menu Contabilidade</title>
+<meta name="description" content="Ficha técnica, CMV e simulador de preço no iFood para restaurantes, lanchonetes e delivery.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --navy:#1D1B19; --navy-deep:#141210; --panel:#26221F; --panel-2:#2E2925; --line:#3D3530;
+  --white:#FFFFFF; --text:#F3ECE4; --muted:#B3A598;
+  --orange:#E4572E; --peach:#F3A88E; --gold:#FFF8F0;
+  --ok:#4CC38A; --run:#5AA7F2; --err:#FF8A80; --warn:#F2C14E;
+  --f:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(120% 80% at 0% 100%, #3A1C10 0%, transparent 45%), linear-gradient(170deg, var(--navy) 0%, var(--navy-deep) 100%);
+  background-color:var(--navy-deep);color:var(--text);font-family:var(--f);font-size:15px;line-height:1.5}
+h1,h2,h3{font-family:var(--f);margin:0;text-wrap:balance;color:var(--white)}
+a{color:var(--peach)}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+[hidden]{display:none!important}
+
+.brandbar{background:var(--white);border-bottom:5px solid var(--orange);padding:14px 16px;padding-top:calc(14px + env(safe-area-inset-top,0px))}
+.brandbar .in{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.brand .logo{width:30px;height:38px;flex:none}
+.brand b{display:block;font:800 19px var(--f);letter-spacing:-.03em;color:#1D1B19;line-height:1.1}
+.brand b span{color:var(--orange)}
+.brand small{display:block;font:600 10.5px var(--f);letter-spacing:.08em;text-transform:uppercase;color:#6A5D55;margin-top:1px}
+.voltar{font:600 13px var(--f);color:#1D1B19;text-decoration:none;border:1.5px solid #1D1B19;border-radius:999px;padding:6px 12px;white-space:nowrap}
+
+.wrap{flex:1;width:100%;max-width:760px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:22px}
+.eyebrow{font:700 12px var(--f);letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.lead{color:var(--muted);margin:6px 0 0}
+.hero h1{font-size:28px;font-weight:800;line-height:1.15;margin-top:4px}
+.card{background:linear-gradient(180deg, rgba(46,41,37,.92), rgba(38,34,31,.92));border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.card h2{font-size:18px}
+.fine{font-size:12.5px;color:var(--muted);margin:0}
+
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--navy-deep);border-radius:12px;padding:4px;gap:4px;border:1px solid var(--line)}
+.tabs button{font:600 14px var(--f);border:0;border-radius:9px;padding:11px 8px;background:transparent;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--orange);color:#1D1B19}
+
+label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:600;color:var(--text);min-width:0}
+label.f small{font-weight:400;color:var(--muted);font-size:12px}
+input,select{font:400 16px var(--f);padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--navy-deep);color:var(--white);width:100%;min-width:0}
+input.num{text-align:right;font-variant-numeric:tabular-nums}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.btn{font:600 14px var(--f);padding:11px 16px;border-radius:11px;border:1px solid var(--line);background:var(--panel-2);color:var(--white);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}
+.btn.primary{background:var(--orange);border-color:var(--orange);color:#1D1B19}
+.btn.ghost{background:transparent}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* Ingredientes */
+.ings{display:flex;flex-direction:column;gap:10px}
+.ing{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1fr) 74px minmax(0,1fr) minmax(0,1.1fr) minmax(0,.8fr) minmax(0,1fr) 34px;gap:8px;align-items:end;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.ing .custo{font-weight:700;color:var(--white);font-variant-numeric:tabular-nums;padding:11px 0;text-align:right;white-space:nowrap}
+.ing .del{width:34px;height:44px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;font-size:18px;line-height:1}
+.ing .del:hover{color:var(--err);border-color:var(--err)}
+.ing label.f{font-size:11.5px}
+.ing label.f input,.ing label.f select{padding:10px 9px;font-size:15px}
+
+/* Resultados */
+.res{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.res div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 14px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.res small{font:600 11px var(--f);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.res b{font:800 22px var(--f);color:var(--white);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.res span{font-size:12.5px;color:var(--muted)}
+.res .destaque{border-color:var(--orange);background:rgba(228,87,46,.1)}
+.res.res2{grid-template-columns:repeat(2,minmax(0,1fr))!important}.res.res2 .destaque{grid-column:auto!important}
+.chip{font:700 11px var(--f);letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px;align-self:flex-start}
+.chip.ok{background:rgba(76,195,138,.16);color:#9BE3BF}
+.chip.warn{background:rgba(242,193,78,.16);color:#F7DA94}
+.chip.bad{background:rgba(255,138,128,.16);color:var(--err)}
+.alerta{font-size:14px;padding:11px 13px;border-radius:10px;background:rgba(255,138,128,.12);color:var(--err);border:1px solid rgba(255,138,128,.35)}
+.nota{font-size:14px;padding:11px 13px;border-radius:10px;background:rgba(228,87,46,.1);color:var(--peach);border:1px solid rgba(228,87,46,.35)}
+
+/* Planos */
+.planos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.plano{position:relative}
+.plano input{position:absolute;opacity:0;pointer-events:none}
+.plano label{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:12px;padding:11px 12px;cursor:pointer;background:var(--panel);height:100%}
+.plano label b{color:var(--white);font-size:14.5px}
+.plano label span{font-size:12px;color:var(--muted)}
+.plano input:checked+label{border-color:var(--orange);background:rgba(228,87,46,.12)}
+.plano input:focus-visible+label{outline:2px solid var(--orange);outline-offset:2px}
+.check{display:flex;gap:10px;align-items:center;font-size:14px;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--orange)}
+
+/* Barra empilhada */
+.stack{display:flex;height:26px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.stack i{display:block;height:100%;min-width:0}
+.leg{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.leg li{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+.leg li:first-child{border-top:0}
+.leg .sw{width:14px;height:14px;border-radius:4px}
+.leg .v{font-weight:700;color:var(--white);font-variant-numeric:tabular-nums;text-align:right}
+.leg .p{color:var(--muted);font-variant-numeric:tabular-nums;min-width:52px;text-align:right;font-size:13px}
+.leg li.sobra{font-weight:700}
+
+.foot{background:var(--white);border-top:5px solid var(--orange);padding:18px 16px;text-align:center;font-size:12px;color:#6A5D55}
+.foot a{color:#1D1B19}
+
+@media (max-width:700px){
+  .ing{grid-template-columns:repeat(6,minmax(0,1fr));background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px}
+  .ing .c-nome{grid-column:1/6}.ing .del{grid-column:6;justify-self:end}
+  .ing .c-usa{grid-column:1/3}.ing .c-un{grid-column:3/5}.ing .c-emb{grid-column:5/7}
+  .ing .c-preco{grid-column:1/3}.ing .c-perda{grid-column:3/5}.ing .custo{grid-column:5/7}
+  .res{grid-template-columns:1fr 1fr}.res .destaque{grid-column:1/-1}
+  .planos{grid-template-columns:1fr}
+}
+@media (max-width:480px){.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.hero h1{font-size:24px}}
+@media print{.brandbar,.tabs,.foot,.row,.del,#vIfood{display:none!important}body{background:#fff;color:#000}.card{border:1px solid #999;background:#fff}h1,h2,b{color:#000!important}}
+</style>
+</head>
+<body>
+<header class="brandbar">
+  <div class="in">
+    <a class="brand" href="https://menucontabil.net.br/" target="_blank" rel="noopener" aria-label="Menu Contabilidade"><svg class="logo" viewBox="-24 0 216 215" aria-hidden="true"><path d="M0 26a26 26 0 0 1 26-26h116a26 26 0 0 1 26 26v171l-16.8 18-16.8-18-16.8 18-16.8-18-16.8 18-16.8-18-16.8 18-16.8-18-16.8 18L0 197z" fill="#E4572E"/><polyline points="25,140 25,64 60,108 95,64 98,98" fill="none" stroke="#FFF8F0" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><polyline points="74,128 94,150 144,97" fill="none" stroke="#FFF8F0" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>menu <span>contabilidade</span></b><small>Ferramentas de gestão</small></span></a>
+    <a class="voltar" href="./">← Área do cliente</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Ferramentas</span>
+    <h1>Faça as contas do seu cardápio</h1>
+    <p class="lead">Descubra quanto custa cada prato e quanto cobrar no salão e no iFood para sobrar dinheiro de verdade.</p>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Ferramentas">
+    <button role="tab" id="tabCmv" aria-controls="vCmv" aria-selected="true">Ficha técnica e CMV</button>
+    <button role="tab" id="tabIfood" aria-controls="vIfood" aria-selected="false">Preço no iFood</button>
+  </div>
+
+  <!-- Ficha técnica -->
+  <section id="vCmv" role="tabpanel" aria-labelledby="tabCmv" style="display:flex;flex-direction:column;gap:16px">
+    <div class="card">
+      <h2>Ficha técnica do prato</h2>
+      <div class="g2">
+        <label class="f" for="pNome">Nome do prato<input id="pNome" placeholder="Ex.: Galeto inteiro com baião"></label>
+        <label class="f" for="pRend">Rende quantas porções?<input id="pRend" class="num" inputmode="decimal" value="1"></label>
+      </div>
+      <p class="fine">Para cada ingrediente, informe quanto vai na receita, o tamanho da embalagem que você compra (na mesma unidade) e quanto pagou. A perda é o que vai fora: casca, osso, gordura, sobra no fundo.</p>
+      <div class="ings" id="ings"></div>
+      <div class="row"><button class="btn" id="btnAdd" type="button">+ Ingrediente</button><button class="btn ghost" id="btnExemplo" type="button">Ver um exemplo</button><button class="btn ghost" id="btnLimpar" type="button">Limpar</button></div>
+      <label class="f" for="pOutros" style="max-width:340px">Outros custos por porção (R$)<small>Gás, descartáveis, guardanapo, molhos de cortesia…</small><input id="pOutros" class="num" inputmode="decimal" placeholder="0,00"></label>
+    </div>
+
+    <div class="card">
+      <h2>Custo e preço</h2>
+      <div class="g2">
+        <label class="f" for="pPreco">Preço de venda no salão (R$)<input id="pPreco" class="num" inputmode="decimal" placeholder="0,00"></label>
+        <label class="f" for="pMeta">CMV que você quer atingir (%)<small>Restaurantes costumam mirar entre 25% e 35%</small><input id="pMeta" class="num" inputmode="decimal" value="30"></label>
+      </div>
+      <div class="res" id="resCmv"></div>
+      <div id="avisoCmv"></div>
+      <div class="row"><button class="btn primary" id="btnLevar" type="button">Usar este custo no simulador do iFood →</button><button class="btn ghost" type="button" onclick="window.print()">Imprimir ficha</button></div>
+    </div>
+
+    <div class="card">
+      <h2>CMV do mês inteiro</h2>
+      <p class="fine">Para saber o CMV real do restaurante: estoque do início do mês + compras do mês − estoque do fim do mês. Depois divida pelo que vendeu.</p>
+      <div class="g3">
+        <label class="f" for="mIni">Estoque no início (R$)<input id="mIni" class="num" inputmode="decimal" placeholder="0,00"></label>
+        <label class="f" for="mCompras">Compras do mês (R$)<input id="mCompras" class="num" inputmode="decimal" placeholder="0,00"></label>
+        <label class="f" for="mFim">Estoque no fim (R$)<input id="mFim" class="num" inputmode="decimal" placeholder="0,00"></label>
+      </div>
+      <label class="f" for="mVendas" style="max-width:340px">Faturamento do mês (R$)<input id="mVendas" class="num" inputmode="decimal" placeholder="0,00"></label>
+      <div class="res" id="resMes"></div>
+    </div>
+  </section>
+
+  <!-- iFood -->
+  <section id="vIfood" role="tabpanel" aria-labelledby="tabIfood" hidden style="display:flex;flex-direction:column;gap:16px">
+    <div class="card">
+      <h2>Seu plano no iFood</h2>
+      <div class="planos" role="radiogroup" aria-label="Plano do iFood">
+        <div class="plano"><input type="radio" name="plano" id="plBasico" value="basico" checked><label for="plBasico"><b>Plano Básico</b><span>Você entrega · 12% + 3,2%</span></label></div>
+        <div class="plano"><input type="radio" name="plano" id="plEntrega" value="entrega"><label for="plEntrega"><b>Plano Entrega</b><span>iFood entrega · 23% + 3,2%</span></label></div>
+        <div class="plano"><input type="radio" name="plano" id="plOutro" value="outro"><label for="plOutro"><b>Personalizado</b><span>Use as taxas do seu contrato</span></label></div>
+      </div>
+      <div class="g2">
+        <label class="f" for="iCom">Comissão do iFood (%)<input id="iCom" class="num" inputmode="decimal" value="12"></label>
+        <label class="f" for="iPag">Taxa de pagamento online (%)<input id="iPag" class="num" inputmode="decimal" value="3,2"></label>
+      </div>
+      <label class="check"><input type="checkbox" id="iPagApp" checked> O cliente paga pelo app (cobra a taxa de pagamento online)</label>
+    </div>
+
+    <div class="card">
+      <h2>Custos do pedido</h2>
+      <div class="g2">
+        <label class="f" for="iCusto">Custo do prato (R$)<small>O custo por porção da ficha técnica</small><input id="iCusto" class="num" inputmode="decimal" placeholder="0,00"></label>
+        <label class="f" for="iEmb">Embalagem e descartáveis (R$)<input id="iEmb" class="num" inputmode="decimal" placeholder="0,00"></label>
+        <label class="f" for="iImp">Imposto sobre a venda (%)<small>Simples: sua alíquota efetiva. MEI: deixe 0 (o DAS é fixo).</small><input id="iImp" class="num" inputmode="decimal" value="4"></label>
+        <label class="f" for="iCupom">Desconto ou cupom que a loja banca (%)<input id="iCupom" class="num" inputmode="decimal" value="0"></label>
+        <label class="f" for="iMargem">Quanto precisa sobrar por pedido (%)<small>Para pagar aluguel, salários, contas e o seu lucro</small><input id="iMargem" class="num" inputmode="decimal" value="30"></label>
+        <label class="f" for="iSalao">Preço no salão (R$, opcional)<small>Para comparar com o preço do app</small><input id="iSalao" class="num" inputmode="decimal" placeholder="0,00"></label>
+      </div>
+    </div>
+
+    <div class="card" aria-live="polite">
+      <h2>Quanto cobrar no iFood</h2>
+      <div id="resIfood"></div>
+      <p class="fine">Taxas de referência do iFood divulgadas em 2026 (Plano Básico 12% e Plano Entrega 23%, mais 3,2% de pagamento online). No Plano Básico a comissão também incide sobre a taxa de entrega, e há mensalidade quando a loja vende mais de R$ 1.800 no mês. Confira sempre os valores do seu contrato.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  Menu Contabilidade · Contabilidade para Food Service · Fortaleza/CE ·
+  <a href="https://wa.me/5585988716021?text=Ol%C3%A1!%20Vim%20pelas%20ferramentas%20da%20Menu%20Contabilidade." target="_blank" rel="noopener">Fale com o contador</a>
+</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const num=v=>{ v=String(v||'').trim(); if(!v) return 0; if(v.includes(',')||/^\d{1,3}(\.\d{3})+$/.test(v)) v=v.replace(/\./g,'').replace(',','.'); const n=Number(v.replace(/[^\d.-]/g,'')); return isNaN(n)?0:n; };
+const brl=v=>(isFinite(v)?v:0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const pc=(v,c=1)=>(isFinite(v)?v*100:0).toLocaleString('pt-BR',{minimumFractionDigits:c,maximumFractionDigits:c})+'%';
+const fmt2=v=>v?Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}):'';
+const guardar=(k,v)=>{ try{ localStorage.setItem('mc_fer_'+k,JSON.stringify(v)); }catch(e){} };
+const ler=k=>{ try{ return JSON.parse(localStorage.getItem('mc_fer_'+k)||'null'); }catch(e){ return null; } };
+function el(tag,cls,txt){ const e=document.createElement(tag); if(cls) e.className=cls; if(txt!==undefined) e.textContent=txt; return e; }
+
+/* Abas */
+function aba(q){
+  const c=q!=='ifood';
+  $('tabCmv').setAttribute('aria-selected',c); $('tabIfood').setAttribute('aria-selected',!c);
+  $('vCmv').hidden=!c; $('vIfood').hidden=c;
+  if(location.hash!=='#'+(c?'cmv':'ifood')) history.replaceState(null,'','#'+(c?'cmv':'ifood'));
+}
+$('tabCmv').onclick=()=>aba('cmv'); $('tabIfood').onclick=()=>aba('ifood');
+window.addEventListener('hashchange',()=>aba(location.hash.slice(1)));
+
+/* Ficha técnica */
+let seq=0;
+function linhaIng(d={}){
+  const id='i'+(++seq);
+  const row=el('div','ing'); row.dataset.id=id;
+  const campo=(cls,rot,inp)=>{ const l=el('label','f '+cls); l.htmlFor=id+cls; l.append(rot); inp.id=id+cls; l.append(inp); return l; };
+  const inp=(v,ph,n=true)=>{ const i=el('input',n?'num':''); i.value=v||''; if(ph) i.placeholder=ph; if(n) i.inputMode='decimal'; i.addEventListener('input',calcCmv); return i; };
+  const un=el('select'); ['g','ml','un'].forEach(u=>{ const o=el('option','',u); o.value=u; un.append(o); }); un.value=d.un||'g'; un.addEventListener('change',calcCmv);
+  row.append(
+    campo('c-nome','Ingrediente',inp(d.nome,'Ex.: frango',false)),
+    campo('c-usa','Usa na receita',inp(d.usa,'0')),
+    campo('c-un','Unid.',un),
+    campo('c-emb','Qtd. na embalagem',inp(d.emb,'0')),
+    campo('c-preco','Preço pago (R$)',inp(d.preco,'0,00')),
+    campo('c-perda','Perda (%)',inp(d.perda,'0'))
+  );
+  const cu=el('div','custo','R$ 0,00'); cu.setAttribute('aria-label','Custo do ingrediente'); row.append(cu);
+  const del=el('button','del','×'); del.type='button'; del.setAttribute('aria-label','Remover ingrediente'); del.onclick=()=>{ row.remove(); calcCmv(); }; row.append(del);
+  $('ings').append(row);
+  return row;
+}
+function lerIngs(){
+  return [...document.querySelectorAll('.ing')].map(r=>{
+    const g=c=>r.querySelector('.'+c+' input, .'+c+' select');
+    return { row:r, nome:g('c-nome').value, usa:g('c-usa').value, un:g('c-un').value, emb:g('c-emb').value, preco:g('c-preco').value, perda:g('c-perda').value };
+  });
+}
+function calcCmv(){
+  let total=0;
+  lerIngs().forEach(i=>{
+    const usa=num(i.usa), emb=num(i.emb), preco=num(i.preco), perda=Math.min(95,Math.max(0,num(i.perda)))/100;
+    const c=emb>0?(preco/emb)*usa/(1-perda):0;
+    i.row.querySelector('.custo').textContent=brl(c);
+    total+=c;
+  });
+  const rend=Math.max(1,num($('pRend').value)||1);
+  const outros=num($('pOutros').value);
+  const porcao=total/rend+outros;
+  const preco=num($('pPreco').value);
+  const meta=num($('pMeta').value)/100;
+  const cmv=preco>0?porcao/preco:null;
+  const sugerido=meta>0?porcao/meta:0;
+  const r=$('resCmv'); r.innerHTML='';
+  const box=(t,v,s,cls)=>{ const d=el('div',cls||''); d.append(el('small','',t),el('b','',v)); if(s) (typeof s==='string'?d.append(el('span','',s)):d.append(s)); r.append(d); };
+  box('Custo por porção',brl(porcao),'receita inteira: '+brl(total));
+  if(cmv!==null){
+    const st=cmv<=.30?['ok','Saudável']:cmv<=.35?['warn','No limite']:['bad','Alto'];
+    box('CMV do prato',pc(cmv),el('span','chip '+st[0],st[1]));
+  } else box('CMV do prato','—','informe o preço de venda');
+  box('Preço para CMV de '+pc(meta,0),brl(sugerido),'preço mínimo sugerido no salão','destaque');
+  const av=$('avisoCmv'); av.innerHTML='';
+  if(cmv!==null&&cmv>.35) av.append(el('div','alerta','Com esse preço, '+pc(cmv)+' do que o cliente paga vai só para os ingredientes. Revise o preço, a porção ou o fornecedor.'));
+  else if(cmv!==null&&preco<sugerido) av.append(el('div','nota','Para chegar ao CMV de '+pc(meta,0)+', o preço precisaria subir '+brl(sugerido-preco)+'.'));
+  guardar('ficha',{nome:$('pNome').value,rend:$('pRend').value,outros:$('pOutros').value,preco:$('pPreco').value,meta:$('pMeta').value,
+    ings:lerIngs().map(({row,...x})=>x)});
+  calcCmv.porcao=porcao;
+}
+['pNome','pRend','pOutros','pPreco','pMeta'].forEach(id=>$(id).addEventListener('input',calcCmv));
+$('btnAdd').onclick=()=>{ linhaIng().querySelector('input').focus(); calcCmv(); };
+$('btnLimpar').onclick=()=>{ $('ings').innerHTML=''; ['pNome','pOutros','pPreco'].forEach(id=>$(id).value=''); $('pRend').value='1'; linhaIng(); calcCmv(); };
+$('btnExemplo').onclick=()=>{
+  $('ings').innerHTML='';
+  $('pNome').value='Galeto com baião (exemplo)'; $('pRend').value='2'; $('pOutros').value='2,50'; $('pPreco').value='54,90';
+  [{nome:'Galeto',usa:'1',un:'un',emb:'1',preco:'16,90',perda:'0'},{nome:'Arroz',usa:'200',un:'g',emb:'1000',preco:'6,50',perda:'0'},
+   {nome:'Feijão-de-corda',usa:'150',un:'g',emb:'1000',preco:'9,80',perda:'0'},{nome:'Queijo coalho',usa:'120',un:'g',emb:'1000',preco:'42,00',perda:'5'},
+   {nome:'Tempero e óleo',usa:'1',un:'un',emb:'1',preco:'2,20',perda:'0'}].forEach(linhaIng);
+  calcCmv();
+};
+$('btnLevar').onclick=()=>{ $('iCusto').value=fmt2(Math.round((calcCmv.porcao||0)*100)/100); if(num($('pPreco').value)) $('iSalao').value=$('pPreco').value; aba('ifood'); calcIfood(); $('vIfood').scrollIntoView({block:'start'}); };
+
+/* CMV do mês */
+function calcMes(){
+  const cmv=num($('mIni').value)+num($('mCompras').value)-num($('mFim').value);
+  const v=num($('mVendas').value);
+  const r=$('resMes'); r.innerHTML='';
+  const box=(t,val,s)=>{ const d=el('div'); d.append(el('small','',t),el('b','',val)); if(s) d.append(s); r.append(d); };
+  box('CMV do mês',brl(cmv));
+  if(v>0){ const p=cmv/v; const st=p<=.30?['ok','Saudável']:p<=.35?['warn','No limite']:['bad','Alto']; box('CMV sobre vendas',pc(p),el('span','chip '+st[0],st[1])); box('Sobra para o resto',brl(v-cmv),el('span','',pc(1-p)+' das vendas')); }
+  guardar('mes',{ini:$('mIni').value,compras:$('mCompras').value,fim:$('mFim').value,vendas:$('mVendas').value});
+}
+['mIni','mCompras','mFim','mVendas'].forEach(id=>$(id).addEventListener('input',calcMes));
+
+/* iFood */
+const PLANOS={basico:[12,3.2],entrega:[23,3.2]};
+document.querySelectorAll('input[name=plano]').forEach(r=>r.addEventListener('change',()=>{
+  const p=PLANOS[r.value]; if(p){ $('iCom').value=String(p[0]).replace('.',','); $('iPag').value=String(p[1]).replace('.',','); } calcIfood();
+}));
+['iCom','iPag'].forEach(id=>$(id).addEventListener('input',()=>{ $('plOutro').checked=true; calcIfood(); }));
+['iPagApp','iCusto','iEmb','iImp','iCupom','iMargem','iSalao'].forEach(id=>$(id).addEventListener('input',calcIfood));
+function partes(preco,cfg){
+  return [
+    ['Ingredientes',cfg.custo,'#E4572E'],['Embalagem',cfg.emb,'#F3A88E'],
+    ['Comissão iFood',preco*cfg.com,'#9E3B1F'],['Pagamento online',preco*cfg.pag,'#7A5A4A'],
+    ['Imposto',preco*cfg.imp,'#5AA7F2'],['Desconto / cupom',preco*cfg.cupom,'#A9D0F8']
+  ];
+}
+function blocoPreco(titulo,preco,cfg){
+  const box=el('div'); box.style.cssText='display:flex;flex-direction:column;gap:10px';
+  const ps=partes(preco,cfg).filter(p=>p[1]>0.004);
+  const gastos=ps.reduce((s,p)=>s+p[1],0), sobra=preco-gastos;
+  const head=el('div','res res2');
+  const d1=el('div','destaque'); d1.append(el('small','',titulo),el('b','',brl(preco)));
+  const d2=el('div'); d2.append(el('small','','Sobra por pedido'),el('b','',brl(sobra)),el('span','',pc(preco>0?sobra/preco:0)+' do preço'));
+  if(sobra<0) d2.style.borderColor='var(--err)';
+  head.append(d1,d2); box.append(head);
+  const st=el('div','stack'); st.setAttribute('role','img');
+  st.setAttribute('aria-label','Para onde vai o dinheiro: '+ps.map(p=>p[0]+' '+brl(p[1])).join(', ')+', sobra '+brl(sobra));
+  const all=ps.concat(sobra>0?[['Sobra',sobra,'#4CC38A']]:[]);
+  const base=Math.max(preco,gastos);
+  all.forEach(p=>{ const i=el('i'); i.style.width=(p[1]/base*100)+'%'; i.style.background=p[2]; i.title=p[0]+': '+brl(p[1]); st.append(i); });
+  box.append(st);
+  const ul=el('ul','leg');
+  all.forEach(p=>{ const li=el('li',p[0]==='Sobra'?'sobra':''); const sw=el('span','sw'); sw.style.background=p[2];
+    li.append(sw,el('span','',p[0]),el('span','v',brl(p[1])),el('span','p',pc(preco>0?p[1]/preco:0))); ul.append(li); });
+  if(sobra<=0){ const li=el('li','sobra'); li.append(el('span'),el('span','','Prejuízo por pedido'),el('span','v',brl(sobra)),el('span','p',pc(preco>0?sobra/preco:0))); li.style.color='var(--err)'; ul.append(li); }
+  box.append(ul);
+  return box;
+}
+function calcIfood(){
+  const cfg={ custo:num($('iCusto').value), emb:num($('iEmb').value), com:num($('iCom').value)/100,
+    pag:$('iPagApp').checked?num($('iPag').value)/100:0, imp:num($('iImp').value)/100, cupom:num($('iCupom').value)/100 };
+  const margem=num($('iMargem').value)/100, salao=num($('iSalao').value);
+  const taxas=cfg.com+cfg.pag+cfg.imp+cfg.cupom;
+  const den=1-taxas-margem;
+  const r=$('resIfood'); r.innerHTML='';
+  if(!(cfg.custo+cfg.emb>0)){ r.append(el('p','fine','Informe o custo do prato (ou monte a ficha técnica e toque em "Usar este custo no simulador").')); guardarIfood(); return; }
+  r.append(el('p','fine','Em cada venda pelo app, '+pc(taxas)+' do preço vai para taxas, imposto e desconto.'));
+  if(den<=0.02){ r.append(el('div','alerta','Com '+pc(taxas)+' de taxas e '+pc(margem,0)+' de sobra desejada, não existe preço que feche a conta. Reduza a margem desejada ou revise as taxas.')); guardarIfood(); return; }
+  const preco=Math.ceil((cfg.custo+cfg.emb)/den*10)/10;
+  r.append(blocoPreco('Preço sugerido no iFood',preco,cfg));
+  if(salao>0){
+    const sep=el('hr'); sep.style.cssText='border:0;border-top:1px dashed var(--line);margin:6px 0'; r.append(sep);
+    const acr=preco/salao-1;
+    r.append(el('div',acr>0?'nota':'nota',acr>0?'O preço no app precisa ser '+pc(acr)+' maior que no salão ('+brl(salao)+') para manter a mesma sobra de '+pc(margem,0)+'.':'O preço do salão já cobre as taxas do app com a margem desejada.'));
+    r.append(blocoPreco('Se cobrar o preço do salão no iFood',salao,cfg));
+  }
+  guardarIfood();
+}
+function guardarIfood(){ guardar('ifood',{plano:document.querySelector('input[name=plano]:checked').value,com:$('iCom').value,pag:$('iPag').value,app:$('iPagApp').checked,
+  custo:$('iCusto').value,emb:$('iEmb').value,imp:$('iImp').value,cupom:$('iCupom').value,margem:$('iMargem').value,salao:$('iSalao').value}); }
+
+/* Início: restaura o que a pessoa já tinha preenchido neste aparelho */
+(function(){
+  const f=ler('ficha');
+  if(f&&f.ings&&f.ings.length){ $('pNome').value=f.nome||''; $('pRend').value=f.rend||'1'; $('pOutros').value=f.outros||''; $('pPreco').value=f.preco||''; $('pMeta').value=f.meta||'30'; f.ings.forEach(linhaIng); }
+  else linhaIng();
+  const m=ler('mes'); if(m){ $('mIni').value=m.ini||''; $('mCompras').value=m.compras||''; $('mFim').value=m.fim||''; $('mVendas').value=m.vendas||''; }
+  const i=ler('ifood');
+  if(i){ const r=document.querySelector('input[name=plano][value="'+i.plano+'"]'); if(r) r.checked=true;
+    $('iCom').value=i.com; $('iPag').value=i.pag; $('iPagApp').checked=i.app!==false; $('iCusto').value=i.custo||''; $('iEmb').value=i.emb||'';
+    $('iImp').value=i.imp??'4'; $('iCupom').value=i.cupom??'0'; $('iMargem').value=i.margem??'30'; $('iSalao').value=i.salao||''; }
+  calcCmv(); calcMes(); calcIfood();
+  aba(location.hash.slice(1)||'cmv');
+})();
+</script>
+</body>
+</html>
