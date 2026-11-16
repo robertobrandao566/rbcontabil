@@ -140,6 +140,36 @@ table.fat input.mudou{border-color:var(--orange)}
 .obr{display:flex;flex-wrap:wrap;gap:6px}
 .obr span{font-size:12.5px;padding:5px 10px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);color:var(--text)}
 @media (max-width:640px){.ext-row{grid-template-columns:1fr 70px}.ext-row .del{grid-column:2}}
+/* Contabilidade */
+.ct-bar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.ct-bar select{width:auto;padding:7px 9px;font-size:13.5px}
+.lancs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.lanc{display:grid;grid-template-columns:22px 78px minmax(0,1.5fr) 112px minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.lanc:first-child{border-top:0}
+.lanc input[type=checkbox]{width:17px;height:17px;accent-color:var(--orange)}
+.lanc .dt{font-size:13px;color:var(--white);font-variant-numeric:tabular-nums}
+.lanc .hs{min-width:0}
+.lanc .hs strong{display:block;color:var(--white);font-size:13.5px;font-weight:600;overflow-wrap:anywhere}
+.lanc .hs small{display:block;font-size:11.5px;color:var(--muted);overflow-wrap:anywhere}
+.lanc .vl{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.lanc .vl.e{color:#9BE3BF}.lanc .vl.s{color:var(--peach)}
+.lanc select{padding:6px 7px;font-size:12.5px}
+.lanc select.falta{border-color:var(--err);color:var(--err)}
+.lanc .acs{display:flex;gap:6px}
+.lanc .ico{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);color:var(--white);cursor:pointer;font-size:15px;line-height:1}
+.lanc .ico.ok{border-color:rgba(76,195,138,.5);color:var(--ok)}
+.lanc .ico.no:hover{border-color:var(--err);color:var(--err)}
+.lanc .lemb{grid-column:3/-1;display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.lanc .lemb input[type=text]{width:auto;flex:1;min-width:160px;max-width:320px;padding:5px 8px;font-size:12.5px}
+.lanc .lemb label{display:flex;gap:6px;align-items:center;cursor:pointer}
+details.ct summary{cursor:pointer;font-weight:600;color:var(--white);font-size:14px;padding:4px 0}
+details.ct[open] summary{margin-bottom:8px}
+.man{display:grid;grid-template-columns:140px minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr) 120px auto;gap:8px;align-items:end}
+.chip.lido{background:rgba(76,195,138,.16);color:#9BE3BF}
+.chip.conf{background:rgba(90,167,242,.16);color:#A9D0F8}
+.chip.nao{background:rgba(255,138,128,.16);color:var(--err)}
+.chip.ign{background:rgba(179,165,152,.16);color:var(--muted)}
+@media (max-width:860px){.lanc{grid-template-columns:22px 70px minmax(0,1fr) auto}.lanc .deb,.lanc .cre{grid-column:2/-1}.lanc .acs{grid-column:2/-1}.lanc .lemb{grid-column:2/-1}.man{grid-template-columns:1fr 1fr}}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--cream);color:#1D1B19;padding:10px 16px;border-radius:999px;font:600 13px var(--f);max-width:90vw;text-align:center;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.35)}
 @media (max-width:860px){.cols{grid-template-columns:1fr}.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:520px){.grid2{grid-template-columns:1fr}.resp{grid-template-columns:1fr}.who span{display:none}}
@@ -195,6 +225,10 @@ table.fat input.mudou{border-color:var(--orange)}
       <div class="card">
         <div class="li-top"><h3 id="rDocsTit">Documentos do mês pendentes</h3><span class="meta">prazo: dia 10</span></div>
         <ul class="list" id="rDocs"></ul>
+      </div>
+      <div class="card">
+        <div class="li-top"><h3>Lançamentos para aprovar</h3><span class="meta">sugeridos pelo agente a partir dos documentos</span></div>
+        <ul class="list" id="rLanc"></ul>
       </div>
       <div class="card">
         <div class="li-top"><h3>MEIs perto do limite</h3><span class="meta">70% ou mais do limite do ano</span></div>
@@ -271,6 +305,38 @@ table.fat input.mudou{border-color:var(--orange)}
         <div class="mini-bar" id="ckBar"><i style="width:0"></i></div>
         <ul class="ck-adm" id="ckLista"></ul>
         <p class="fine" id="ckAnterior"></p>
+      </div>
+
+      <div class="card" id="cCont">
+        <div class="li-top"><h3>Contabilidade</h3><span class="meta" id="ctResumo">Carregando…</span></div>
+        <div class="ct-bar">
+          <div class="row">
+            <button class="btn sm" type="button" id="ctLer">Ler documentos novos agora</button>
+            <button class="btn sm" type="button" id="ctLerTodos" title="Inclui os arquivos enviados antes de ligar o agente">Ler também os antigos</button>
+          </div>
+          <div class="row">
+            <select id="ctComp" aria-label="Mês dos relatórios"></select>
+            <button class="btn primary sm" type="button" id="ctGerar">Gerar relatórios do mês</button>
+          </div>
+        </div>
+        <div class="info" id="ctAviso" hidden></div>
+        <div class="li-top" style="margin-top:4px"><b style="color:var(--white)">Lançamentos para aprovar</b>
+          <div class="row"><button class="btn sm" type="button" id="ctMarcar">Marcar os que já têm conta</button>
+          <button class="btn sm primary" type="button" id="ctAprovar">Aprovar marcados</button></div></div>
+        <ul class="lancs" id="ctLista"></ul>
+        <details class="ct" id="ctManual"><summary>Lançamento manual (saldo inicial, ajuste, provisão)</summary>
+          <div class="man">
+            <label class="f">Data<input type="date" id="mData"></label>
+            <label class="f">Histórico<input id="mHist" placeholder="Ex.: Saldo inicial em conta"></label>
+            <label class="f">Débito<select id="mDeb"></select></label>
+            <label class="f">Crédito<select id="mCred"></select></label>
+            <label class="f">Valor (R$)<input id="mValor" inputmode="decimal" placeholder="0,00"></label>
+            <button class="btn primary" type="button" id="mSalvar">Lançar</button>
+          </div>
+          <p class="fine" style="margin-top:6px">O lançamento manual já entra aprovado.</p>
+        </details>
+        <details class="ct"><summary id="ctLeitTit">Documentos lidos pelo agente</summary><ul class="list" id="ctLeituras"></ul></details>
+        <details class="ct"><summary id="ctRelTit">Relatórios gerados</summary><ul class="list" id="ctRels"></ul></details>
       </div>
 
       <div class="card" id="cPerfil">
@@ -419,6 +485,15 @@ async function carregarResumo(){
       const b=el('button','btn sm','Abrir cliente'); b.type='button'; b.onclick=()=>abrirCliente(x.cnpj);
       li.append(top,b); ud.append(li);
     });
+    const ul=$('rLanc'); ul.innerHTML='';
+    if(!(r.lancamentos||[]).length) ul.innerHTML='<li><p class="empty">Nenhum lançamento esperando aprovação.</p></li>';
+    (r.lancamentos||[]).forEach(x=>{
+      const li=el('li'); const top=el('div','li-top');
+      const t=el('div'); t.append(el('strong','',x.nome),el('div','meta',x.cnpj+(x.aClassificar?' · '+x.aClassificar+' sem conta':'')));
+      top.append(t,el('span','chip '+(x.aClassificar?'pendente':'andamento'),x.n+' para aprovar'));
+      const b=el('button','btn sm','Abrir cliente'); b.type='button'; b.onclick=()=>abrirCliente(x.cnpj);
+      li.append(top,b); ul.append(li);
+    });
     const um=$('rMei'); um.innerHTML='';
     if(!(r.meisAtencao||[]).length) um.innerHTML='<li><p class="empty">Nenhum MEI acima de 70% do limite.</p></li>';
     (r.meisAtencao||[]).forEach(m=>{
@@ -459,7 +534,8 @@ $('busca').addEventListener('input',renderClientes);
 /* Detalhe */
 async function abrirCliente(cnpj){
   aba('detalhe'); $('dNome').textContent='Carregando…'; $('dMeta').textContent='';
-  try{ renderDetalhe(await chamar('adminDetalheCliente',sess.token,cnpj)); }catch(x){ toast(x.message); }
+  $('ctAviso').hidden=true;
+  try{ renderDetalhe(await chamar('adminDetalheCliente',sess.token,cnpj)); carregarContabil(cnpj); }catch(x){ toast(x.message); }
 }
 function renderDetalhe(d){
   atual=d; const c=d.cliente;
@@ -582,6 +658,124 @@ $('btnPerfil').onclick=async()=>{
   const b=$('btnPerfil'); b.disabled=true; b.textContent='Salvando…';
   try{ renderDetalhe(await chamar('adminSalvarPerfil',sess.token,atual.cliente.cnpj,{funcionarios:$('pFunc').checked,prolabore:$('pPro').checked,itens:$('pItens').value,extras:extras})); toast('Perfil salvo'); }
   catch(x){ toast(x.message); } finally{ b.disabled=false; b.textContent='Salvar perfil'; }
+};
+
+/* Contabilidade */
+let cont=null, opcoesPlano='';
+const SIT_CLS={'Lido':'lido','Conferência':'conf','Já lançado':'ign','Ignorado':'ign','Não reconhecido':'nao','Erro':'nao'};
+async function carregarContabil(cnpj){
+  $('ctResumo').textContent='Carregando…'; $('ctLista').innerHTML='';
+  try{ renderContabil(await chamar('adminContabil',sess.token,cnpj)); }catch(x){ $('ctResumo').textContent=''; toast(x.message); }
+}
+function selConta(valor,cls){
+  const s=el('select',cls); s.innerHTML=opcoesPlano; s.value=valor;
+  if(s.value!==valor){ const o=el('option','',valor); o.value=valor; s.prepend(o); s.value=valor; }
+  const marca=()=>s.classList.toggle('falta',s.value==='9.9.99'); marca(); s.addEventListener('change',marca);
+  return s;
+}
+function renderContabil(c){
+  cont=c;
+  opcoesPlano=c.plano.map(p=>'<option value="'+p.codigo+'">'+p.codigo+' '+p.nome.replace(/</g,'&lt;')+'</option>').join('');
+  const sug=c.sugeridos, semConta=sug.filter(l=>l.debito==='9.9.99'||l.credito==='9.9.99').length;
+  $('ctResumo').textContent=sug.length?sug.length+' para aprovar'+(semConta?' · '+semConta+' sem conta':''):'nada para aprovar'+(c.naoLidos?' · '+c.naoLidos+' arquivo(s) ainda não lido(s)':'');
+  // meses para relatório
+  const sel=$('ctComp'); sel.innerHTML='';
+  const comps=c.competencias.filter(x=>x.aprovados||x.sugeridos);
+  if(!comps.length){ const o=el('option','','Sem lançamentos ainda'); o.value=''; sel.append(o); }
+  comps.forEach(x=>{ const o=el('option','',compRot(x.comp)+' · '+x.aprovados+' aprovado'+(x.aprovados===1?'':'s')+(x.sugeridos?' · '+x.sugeridos+' pendente'+(x.sugeridos===1?'':'s'):'')); o.value=x.comp; sel.append(o); });
+  if(comps.some(x=>x.comp===c.compReferencia)) sel.value=c.compReferencia;
+  $('ctGerar').disabled=!comps.some(x=>x.aprovados);
+  // lista
+  const ul=$('ctLista'); ul.innerHTML='';
+  if(!sug.length) ul.innerHTML='<li><p class="empty">Nenhum lançamento esperando aprovação. O agente lê os arquivos novos de hora em hora.</p></li>';
+  sug.forEach(l=>ul.append(linhaLanc(l)));
+  $('ctAprovar').disabled=$('ctMarcar').disabled=!sug.length;
+  // manual
+  $('mDeb').innerHTML=opcoesPlano; $('mCred').innerHTML=opcoesPlano;
+  $('mDeb').value='1.1.02'; $('mCred').value='3.1.01';
+  // leituras
+  const ulL=$('ctLeituras'); ulL.innerHTML='';
+  $('ctLeitTit').textContent='Documentos lidos pelo agente ('+c.leituras.length+')';
+  if(!c.leituras.length) ulL.innerHTML='<li><p class="empty">Nenhum documento lido ainda.</p></li>';
+  c.leituras.forEach(x=>{ const li=el('li'); const top=el('div','li-top'); const t=el('div');
+    t.append(el('strong','',x.nome),el('div','meta',x.tipo+' · lido em '+dBR(x.lidoEm)+(x.n?' · '+x.n+' lançamento'+(x.n>1?'s':''):'')+(x.obs?' · '+x.obs:'')));
+    top.append(t,el('span','chip '+(SIT_CLS[x.situacao]||'ign'),x.situacao)); li.append(top); ulL.append(li); });
+  // relatórios
+  const ulR=$('ctRels'); ulR.innerHTML='';
+  $('ctRelTit').textContent='Relatórios gerados ('+c.relatorios.length+')';
+  if(!c.relatorios.length) ulR.innerHTML='<li><p class="empty">Nenhum relatório gerado ainda.</p></li>';
+  c.relatorios.forEach(r=>{ const li=el('li'); const top=el('div','li-top'); const t=el('div');
+    t.append(el('strong','',r.nome),el('div','meta','gerado em '+dBR(r.data)));
+    const a=el('a','btn sm','Abrir'); a.href=r.url; a.target='_blank'; a.rel='noopener'; top.append(t,a); li.append(top); ulR.append(li); });
+}
+function linhaLanc(l){
+  const li=el('li','lanc'); li.dataset.id=l.id;
+  const ck=el('input'); ck.type='checkbox'; ck.setAttribute('aria-label','Marcar '+l.historico);
+  const entrada=l.debito==='1.1.02', saida=l.credito==='1.1.02';
+  const hs=el('div','hs'); hs.append(el('strong','',l.historico),el('small','',l.como+(l.documento?' · '+l.documento:'')));
+  const vl=el('div','vl'+(entrada?' e':saida?' s':''),(entrada?'+ ':saida?'− ':'')+brl(l.valor));
+  const deb=selConta(l.debito,'deb'), cre=selConta(l.credito,'cre');
+  deb.setAttribute('aria-label','Débito'); cre.setAttribute('aria-label','Crédito'); deb.title='Débito'; cre.title='Crédito';
+  const acs=el('div','acs');
+  const ap=el('button','ico ok','✓'); ap.type='button'; ap.title='Aprovar'; ap.setAttribute('aria-label','Aprovar este lançamento');
+  const rj=el('button','ico no','✕'); rj.type='button'; rj.title='Rejeitar'; rj.setAttribute('aria-label','Rejeitar este lançamento');
+  acs.append(ap,rj);
+  li.append(ck,el('div','dt',dBR(l.data)),hs,vl,deb,cre,acs);
+  if((entrada||saida)&&l.sugestaoRegra){
+    const lb=el('div','lemb'); const lab=el('label'); const cb=el('input'); cb.type='checkbox'; cb.className='lembrar';
+    lab.append(cb,'Lembrar para os próximos: quando o histórico tiver');
+    const tx=el('input'); tx.type='text'; tx.className='chave'; tx.value=l.sugestaoRegra; tx.setAttribute('aria-label','Texto da regra');
+    lb.append(lab,tx); li.append(lb);
+    lb.hidden=l.debito!=='9.9.99'&&l.credito!=='9.9.99';
+    const mudou=()=>{ lb.hidden=false; cb.checked=deb.value!=='9.9.99'&&cre.value!=='9.9.99'; ck.checked=cb.checked; };
+    deb.addEventListener('change',mudou); cre.addEventListener('change',mudou);
+  } else { const m=()=>{ ck.checked=deb.value!=='9.9.99'&&cre.value!=='9.9.99'; }; deb.addEventListener('change',m); cre.addEventListener('change',m); }
+  ap.onclick=()=>aprovar([li],ap);
+  rj.onclick=async()=>{ rj.disabled=true; try{ renderContabil(await chamar('adminRejeitarLancamentos',sess.token,atual.cliente.cnpj,[l.id])); toast('Lançamento rejeitado'); }catch(x){ toast(x.message); rj.disabled=false; } };
+  return li;
+}
+function itemDaLinha(li){
+  const it={id:li.dataset.id,debito:li.querySelector('select.deb').value,credito:li.querySelector('select.cre').value};
+  const cb=li.querySelector('.lembrar'); if(cb&&cb.checked) it.lembrar={texto:li.querySelector('.chave').value};
+  return it;
+}
+async function aprovar(lis,btn){
+  if(!lis.length){ toast('Marque os lançamentos que quer aprovar'); return; }
+  const rot=btn.textContent; btn.disabled=true; if(btn.id) btn.textContent='Aprovando…';
+  try{
+    const r=await chamar('adminAprovarLancamentos',sess.token,atual.cliente.cnpj,lis.map(itemDaLinha));
+    renderContabil(r.contabil);
+    toast(r.aprovados+' lançamento'+(r.aprovados>1?'s':'')+' aprovado'+(r.aprovados>1?'s':'')+(r.regras?' · '+r.regras+' regra'+(r.regras>1?'s':'')+' nova'+(r.regras>1?'s':''):''));
+  }catch(x){ toast(x.message); }
+  finally{ btn.disabled=false; btn.textContent=rot; }
+}
+$('ctAprovar').onclick=()=>aprovar([...document.querySelectorAll('#ctLista .lanc')].filter(li=>li.querySelector('input[type=checkbox]').checked),$('ctAprovar'));
+$('ctMarcar').onclick=()=>document.querySelectorAll('#ctLista .lanc').forEach(li=>{ li.querySelector('input[type=checkbox]').checked=li.querySelector('select.deb').value!=='9.9.99'&&li.querySelector('select.cre').value!=='9.9.99'; });
+async function lerAgora(todos,btn){
+  const rot=btn.textContent; btn.disabled=true; btn.textContent='Lendo… (pode levar 1 a 2 min)';
+  try{ const r=await chamar('adminLerDocumentos',sess.token,atual.cliente.cnpj,todos); renderContabil(r);
+    toast(r.lidos?r.lidos+' arquivo'+(r.lidos>1?'s':'')+' lido'+(r.lidos>1?'s':'')+' · '+r.lancamentos+' lançamento'+(r.lancamentos===1?'':'s')+(r.pendentes?' · faltam '+r.pendentes+', clique de novo':''):'Nenhum arquivo novo para ler'); }
+  catch(x){ toast(x.message); } finally{ btn.disabled=false; btn.textContent=rot; }
+}
+$('ctLer').onclick=()=>lerAgora(false,$('ctLer'));
+$('ctLerTodos').onclick=()=>lerAgora(true,$('ctLerTodos'));
+$('ctGerar').onclick=async()=>{
+  const comp=$('ctComp').value; if(!comp) return;
+  const b=$('ctGerar'); b.disabled=true; b.textContent='Gerando…';
+  try{
+    const r=await chamar('adminGerarRelatorios',sess.token,atual.cliente.cnpj,comp);
+    const box=$('ctAviso'); box.hidden=false; box.innerHTML='';
+    const a=el('a','','Abrir '+r.nome); a.href=r.url; a.target='_blank'; a.rel='noopener';
+    box.append('Relatórios prontos (balancete, DRE, razão e diário). Resultado do mês: '+brl(r.dreMes.resultado)+'. ',a);
+    (r.avisos||[]).forEach(t=>box.append(el('div','',t)));
+    carregarContabil(atual.cliente.cnpj);
+  }catch(x){ toast(x.message); } finally{ b.disabled=false; b.textContent='Gerar relatórios do mês'; }
+};
+$('mSalvar').onclick=async()=>{
+  const b=$('mSalvar'); b.disabled=true;
+  try{ renderContabil(await chamar('adminNovoLancamento',sess.token,atual.cliente.cnpj,{data:$('mData').value,historico:$('mHist').value,debito:$('mDeb').value,credito:$('mCred').value,valor:$('mValor').value}));
+    toast('Lançamento manual gravado'); $('mHist').value=''; $('mValor').value=''; }
+  catch(x){ toast(x.message); } finally{ b.disabled=false; }
 };
 
 /* Faturamento e enquadramento */
