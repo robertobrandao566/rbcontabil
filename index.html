@@ -18,13 +18,13 @@
 <style>
 /* Identidade Menu Contabilidade: grafite, laranja tomate, creme e marrom (mesma paleta do site e dos posts) */
 :root{
-  --navy:#1D1B19; --navy-deep:#141210; --panel:#26221F; --panel-2:#2E2925; --line:#3D3530;
-  --white:#FFFFFF; --text:#F3ECE4; --muted:#B3A598;
-  --orange:#E4572E; --peach:#F3A88E; --gold:#FFF8F0;
-  --ok:#4CC38A; --run:#5AA7F2; --wait:#E4572E; --err:#FF8A80;
+  --navy:#1D1B19; --navy-deep:#FFFFFF; --panel:#FFFFFF; --panel-2:#F6F4F1; --line:#E1DCD6;
+  --white:#1D1B19; --text:#35312D; --muted:#6B625B;
+  --orange:#E4572E; --peach:#B5401C; --gold:#F6F4F1;
+  --ok:#1F7A4D; --run:#2563A8; --wait:#D9480F; --err:#B3261E;
   --f-head:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
   --f-body:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
-  color-scheme:dark;
+  color-scheme:light;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -291,6 +291,132 @@ input::placeholder,textarea::placeholder{color:#7A6D63}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--white);color:var(--navy);padding:10px 16px;border-radius:999px;font:600 13px var(--f-body);max-width:90vw;text-align:center;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.35)}
 @media (max-width:480px){.actions{grid-template-columns:1fr 1fr}.action.wa{grid-column:1/-1;flex-direction:row;align-items:center;flex-wrap:wrap}.actions:has(#btnDas[hidden]) .action.wa{grid-column:auto;flex-direction:column;align-items:flex-start}.two{grid-template-columns:1fr}.hello h1{font-size:24px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ===== Visual v8: claro e sóbrio ===== */
+body{background:#F1EFEB;color:var(--text)}
+h1,h2,h3{letter-spacing:-.01em}
+.deco{display:none}
+.brandbar{background:#1D1B19;border-bottom:0;padding-block:12px;padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.brand b{color:#FFFFFF;font-weight:700}
+.brand small{color:#B9B0A8;text-transform:none;letter-spacing:0;font-weight:500;font-size:11.5px}
+.brandbar .wa-mini,.voltar{color:#FFFFFF;border:1px solid rgba(255,255,255,.35);border-radius:8px;font-weight:600}
+.eyebrow{font:600 13px var(--f-body,var(--f));letter-spacing:0;text-transform:none;color:var(--muted)}
+.card{background:#FFFFFF;border:1px solid var(--line);border-radius:10px;backdrop-filter:none}
+.btn{border-radius:8px;background:#FFFFFF;border-color:#CFC8C0;color:#1D1B19}
+.btn.primary{background:#1D1B19;border-color:#1D1B19;color:#FFFFFF}
+.btn.ghost{background:transparent}
+.tabs{background:#EDEAE5;border:0;border-radius:8px}
+.tabs button{border-radius:6px}
+.tabs button[aria-selected="true"]{background:#FFFFFF;color:#1D1B19;box-shadow:0 1px 2px rgba(29,27,25,.12)}
+input,select,textarea{border-radius:8px;border-color:#CFC8C0;background:#FFFFFF;color:#1D1B19}
+input::placeholder,textarea::placeholder{color:#9A9189}
+.msg{background:#FBEDEB;border-color:#EBC4BF;color:var(--err)}
+.toast{background:#1D1B19;color:#FFFFFF;border-radius:8px;box-shadow:0 4px 14px rgba(29,27,25,.25)}
+.foot{background:transparent;border-top:1px solid var(--line)}
+.foot .brand b{color:#1D1B19}
+.foot .brand small{color:var(--muted)}
+
+.wrap{gap:20px;padding-block:22px 36px}
+.hello .eyebrow{display:none}
+.hello h1{font-size:24px;font-weight:700}
+.tag{background:transparent;border:1px solid #CFC8C0;border-radius:6px;color:var(--text);letter-spacing:0;font-weight:600}
+.out{border-radius:8px;border-color:#CFC8C0;color:var(--text)}
+.sec-head h2{font-size:20px;font-weight:700}
+.quote{border-left:3px solid var(--line);color:var(--text);font-weight:500;font-size:14.5px}
+
+/* Lista de seções: um painel só, linhas separadas por fio */
+.ac-lista{gap:0;background:#FFFFFF;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.ac + .ac{border-top:1px solid var(--line)}
+.ac-btn{background:transparent;border:0;border-radius:0;padding:16px;grid-template-columns:22px 1fr auto 18px;gap:14px}
+.ac-btn:hover{background:#FAF9F7}
+.ac-btn .ic{width:22px;height:22px;border-radius:0;background:none;color:#4A443F}
+.ac-btn .ic svg{width:22px;height:22px;stroke-width:1.7}
+.ac-t b{font:600 15.5px var(--f-head);color:#1D1B19}
+.ac-t small{font-size:13px}
+.ac-t small .late,.ac-t small.late,.ck-prazo.late,.ck-prazo.late b{color:var(--wait)}
+.ac-badge{background:none;border:0;padding:0;font:600 13px var(--f-body);color:var(--muted);text-align:right}
+.ac-badge.hot{background:none;color:var(--wait)}
+.ac-badge.ok{background:none;color:var(--ok)}
+.ac-chev{width:18px;height:18px;stroke:#9A9189;stroke-width:2}
+.ac-btn[aria-expanded="true"]{background:#FAF9F7;border-radius:0;box-shadow:inset 3px 0 0 #1D1B19}
+.ac-btn[aria-expanded="true"] .ac-chev{stroke:#1D1B19}
+.ac-body{padding:4px 16px 18px;background:#FAF9F7;gap:14px}
+.ac-body .card{background:none;border:0;border-radius:0;padding:0}
+.ac-body .card + .card,.ac-body .card + form.card,.ac-body form.card + .card,.ac-body form.card{border-top:1px solid var(--line);padding-top:16px}
+.ac-body .dica{border-left:3px solid var(--ok);padding-left:12px;border-top:0}
+.ac-body .dica.v{border-left-color:var(--wait)}
+@media (max-width:480px){.ac-btn{grid-template-columns:22px 1fr auto 18px;gap:12px;padding:15px 14px}.ac-btn .ic{width:22px;height:22px}.ac-body{padding:2px 14px 16px}}
+
+/* Vencimentos */
+.bigdate{width:64px;background:#FFFFFF;border:1px solid #CFC8C0;border-radius:8px;color:#1D1B19;padding:8px 0;display:flex;flex-direction:column-reverse;gap:2px}
+.bigdate b{font-size:26px;font-weight:700}
+.bigdate span{font-size:11.5px;font-weight:600;letter-spacing:0;text-transform:lowercase;color:var(--wait)}
+.next h3{font-size:17px;font-weight:700}
+.next .faltam{font:600 13px var(--f-body);letter-spacing:0;text-transform:lowercase;color:var(--wait)}
+.duelist .d{font-weight:600}
+.duelist .d small{letter-spacing:0;text-transform:lowercase;font-size:11.5px}
+.chip{border-radius:6px;padding:0;background:none!important;border:0!important;font-weight:600;font-size:12.5px}
+.chip.hot{color:var(--wait)}
+.chip.cool{color:var(--muted)}
+
+/* Guias */
+.total{font-weight:700;font-size:20px;text-align:left}
+.total small,.th-top small,.kpi small,.months b{letter-spacing:0;text-transform:none;font-weight:500;font-size:12.5px}
+.guia{border-radius:8px}
+.guia[data-s="vencida"]{border-color:#E3B1AC}
+.guia .gd{border-radius:6px;background:#F6F4F1}
+.guia[data-s="pendente"] .gd{background:#F6F4F1}
+.guia[data-s="vencida"] .gd{background:#FBEDEB}
+.guia .gd b{font-weight:700}
+.guia .gd span{letter-spacing:0;text-transform:lowercase;font-weight:500;font-size:11.5px}
+.guia .gv{font-weight:700;font-size:17px}
+.gs,.status{letter-spacing:0;text-transform:none;border-radius:6px;font:600 12px var(--f-body);padding:3px 8px}
+.gs.pendente,.status.pendente{background:#FCEFE8;color:#A63D0C}
+.gs.vencida{background:#FBEDEB;color:var(--err)}
+.gs.paga,.status.concluido{background:#E8F3EC;color:var(--ok)}
+.status.andamento{background:#E9F0F8;color:var(--run)}
+
+/* Faturamento */
+.th-top b{font-weight:700;font-size:24px}
+.th-pct{font-weight:700;font-size:26px}
+.thermo[data-n="warn"] .th-pct{color:var(--wait)}
+.bar,.ck-bar{background:#ECE8E3;border:0;height:10px}
+.bar-leg{margin-top:-4px}
+.bar .mk{background:rgba(29,27,25,.4)}
+.thermo[data-n="warn"] .bar i{background:var(--wait)}
+.pend{background:#FCEFE8;border:0;border-radius:8px;color:#8A3410}
+.months li,.kpi{border-radius:8px;background:#FFFFFF}
+.kpi b{font-weight:700;font-size:20px}
+.chart i{background:#4A443F;border-radius:3px 3px 0 0}
+.chart small{text-transform:none;letter-spacing:0;font-size:10.5px}
+.tool{border-radius:8px}
+.tool:hover{border-color:#1D1B19}
+.tool .ic{width:auto;height:auto;background:none;color:#4A443F;place-items:start}
+.tool .ic svg{width:22px;height:22px;stroke-width:1.7}
+.tool b{font-weight:600}
+
+/* Documentos do mês */
+.ck-ic{border-width:1.5px;border-color:#CFC8C0}
+.ck-item[data-s="Enviado"] .ck-ic,.ck-item[data-s="Conferido"] .ck-ic{color:#FFFFFF}
+.ck-item[data-s="Sem movimento"] .ck-ic{background:#F6F4F1;border-color:#CFC8C0}
+.ck-ok{background:#E8F3EC;border:0;border-radius:8px;color:var(--ok)}
+
+/* Instalar */
+.install{background:#FFFFFF;border:1px solid var(--line);border-radius:10px}
+.install img{border-radius:9px}
+
+/* Solicitações e arquivos */
+.count{border-radius:8px}
+.count b{font-weight:700;font-size:20px}
+.count[aria-pressed="true"]{border-color:#1D1B19;background:#FAF9F7}
+.req{border-radius:8px;border-left-width:3px}
+.req .resp{color:var(--text);border-top-style:solid}
+.files .dl{background:#FFFFFF;border:1px solid #CFC8C0;border-radius:8px;color:#1D1B19}
+.drop{border-radius:8px;border-color:#CFC8C0;background:#FFFFFF}
+.drop.over{border-color:#1D1B19;background:#FAF9F7}
+.pagar{border-top-style:solid}
+
+.fab{background:#1FA855;color:#FFFFFF;font-weight:600;border-radius:10px;padding:11px 14px;box-shadow:0 4px 14px rgba(29,27,25,.22)}
 </style>
 </head>
 <body>
@@ -792,7 +918,7 @@ function renderMei(f,c){
   else if(pct>=70) msg='Atenção: ainda cabem '+fmtMoeda(m.disponivel)+' este ano.';
   else msg='Tudo tranquilo: ainda cabem '+fmtMoeda(m.disponivel)+' este ano.';
   card.innerHTML='<div class="th-top"><div><small>Faturado em '+m.ano+'</small><b>'+fmtMoeda(m.acumulado)+'</b></div>'+
-    '<div class="th-pct">'+Math.round(pct)+'%<small style="display:block;font:600 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px">do limite</small></div></div>'+
+    '<div class="th-pct">'+Math.round(pct)+'%<small style="display:block;font:500 12.5px var(--f-body);color:var(--muted);margin-top:4px">do limite</small></div></div>'+
     '<div class="bar" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'" aria-label="Faturamento do ano em relação ao limite do MEI"><i style="width:'+w+'%"></i><span class="mk" style="left:70%"></span><span class="mk" style="left:90%"></span></div>'+
     '<div class="bar-leg"><span style="left:0">R$ 0</span><span style="right:0">limite '+fmtMoeda(m.limite).replace(',00','')+'</span></div>'+
     '<p class="th-sub" style="margin-top:-6px">As marcas na barra mostram 70% e 90% do limite, quando avisamos você por e-mail.</p>'+
